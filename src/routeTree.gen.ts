@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientIndexRouteImport } from './routes/client.index'
+import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
 import { Route as ClientRecommendationIdRouteImport } from './routes/client.recommendation.$id'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const ClientIndexRoute = ClientIndexRouteImport.update({
   id: '/client/',
   path: '/client/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalystIndexRoute = AnalystIndexRouteImport.update({
+  id: '/analyst/',
+  path: '/analyst/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientProfileRoute = ClientProfileRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
+  '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/client/product/$id': typeof ClientProductIdRoute
   '/client/recommendation/$id': typeof ClientRecommendationIdRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
+  '/analyst': typeof AnalystIndexRoute
   '/client': typeof ClientIndexRoute
   '/client/product/$id': typeof ClientProductIdRoute
   '/client/recommendation/$id': typeof ClientRecommendationIdRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
+  '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/client/product/$id': typeof ClientProductIdRoute
   '/client/recommendation/$id': typeof ClientRecommendationIdRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/client/activity'
     | '/client/profile'
+    | '/analyst/'
     | '/client/'
     | '/client/product/$id'
     | '/client/recommendation/$id'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/client/activity'
     | '/client/profile'
+    | '/analyst'
     | '/client'
     | '/client/product/$id'
     | '/client/recommendation/$id'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/client/activity'
     | '/client/profile'
+    | '/analyst/'
     | '/client/'
     | '/client/product/$id'
     | '/client/recommendation/$id'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClientActivityRoute: typeof ClientActivityRoute
   ClientProfileRoute: typeof ClientProfileRoute
+  AnalystIndexRoute: typeof AnalystIndexRoute
   ClientIndexRoute: typeof ClientIndexRoute
   ClientProductIdRoute: typeof ClientProductIdRoute
   ClientRecommendationIdRoute: typeof ClientRecommendationIdRoute
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/client'
       fullPath: '/client/'
       preLoaderRoute: typeof ClientIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyst/': {
+      id: '/analyst/'
+      path: '/analyst'
+      fullPath: '/analyst/'
+      preLoaderRoute: typeof AnalystIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/client/profile': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClientActivityRoute: ClientActivityRoute,
   ClientProfileRoute: ClientProfileRoute,
+  AnalystIndexRoute: AnalystIndexRoute,
   ClientIndexRoute: ClientIndexRoute,
   ClientProductIdRoute: ClientProductIdRoute,
   ClientRecommendationIdRoute: ClientRecommendationIdRoute,
