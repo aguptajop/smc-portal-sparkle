@@ -9,38 +9,192 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ClientIndexRouteImport } from './routes/client.index'
+import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
+import { Route as ClientProfileRouteImport } from './routes/client.profile'
+import { Route as ClientActivityRouteImport } from './routes/client.activity'
+import { Route as AnalystPreviewRouteImport } from './routes/analyst.preview'
+import { Route as AnalystCreateRouteImport } from './routes/analyst.create'
+import { Route as AnalystCommentaryRouteImport } from './routes/analyst.commentary'
+import { Route as ClientRecommendationIdRouteImport } from './routes/client.recommendation.$id'
+import { Route as ClientProductIdRouteImport } from './routes/client.product.$id'
+import { Route as AnalystRecommendationIdRouteImport } from './routes/analyst.recommendation.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientIndexRoute = ClientIndexRouteImport.update({
+  id: '/client/',
+  path: '/client/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalystIndexRoute = AnalystIndexRouteImport.update({
+  id: '/analyst/',
+  path: '/analyst/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientProfileRoute = ClientProfileRouteImport.update({
+  id: '/client/profile',
+  path: '/client/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientActivityRoute = ClientActivityRouteImport.update({
+  id: '/client/activity',
+  path: '/client/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalystPreviewRoute = AnalystPreviewRouteImport.update({
+  id: '/analyst/preview',
+  path: '/analyst/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalystCreateRoute = AnalystCreateRouteImport.update({
+  id: '/analyst/create',
+  path: '/analyst/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalystCommentaryRoute = AnalystCommentaryRouteImport.update({
+  id: '/analyst/commentary',
+  path: '/analyst/commentary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientRecommendationIdRoute = ClientRecommendationIdRouteImport.update({
+  id: '/client/recommendation/$id',
+  path: '/client/recommendation/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientProductIdRoute = ClientProductIdRouteImport.update({
+  id: '/client/product/$id',
+  path: '/client/product/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalystRecommendationIdRoute = AnalystRecommendationIdRouteImport.update({
+  id: '/analyst/recommendation/$id',
+  path: '/analyst/recommendation/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/analyst/commentary': typeof AnalystCommentaryRoute
+  '/analyst/create': typeof AnalystCreateRoute
+  '/analyst/preview': typeof AnalystPreviewRoute
+  '/client/activity': typeof ClientActivityRoute
+  '/client/profile': typeof ClientProfileRoute
+  '/analyst/': typeof AnalystIndexRoute
+  '/client/': typeof ClientIndexRoute
+  '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
+  '/client/product/$id': typeof ClientProductIdRoute
+  '/client/recommendation/$id': typeof ClientRecommendationIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/analyst/commentary': typeof AnalystCommentaryRoute
+  '/analyst/create': typeof AnalystCreateRoute
+  '/analyst/preview': typeof AnalystPreviewRoute
+  '/client/activity': typeof ClientActivityRoute
+  '/client/profile': typeof ClientProfileRoute
+  '/analyst': typeof AnalystIndexRoute
+  '/client': typeof ClientIndexRoute
+  '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
+  '/client/product/$id': typeof ClientProductIdRoute
+  '/client/recommendation/$id': typeof ClientRecommendationIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/analyst/commentary': typeof AnalystCommentaryRoute
+  '/analyst/create': typeof AnalystCreateRoute
+  '/analyst/preview': typeof AnalystPreviewRoute
+  '/client/activity': typeof ClientActivityRoute
+  '/client/profile': typeof ClientProfileRoute
+  '/analyst/': typeof AnalystIndexRoute
+  '/client/': typeof ClientIndexRoute
+  '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
+  '/client/product/$id': typeof ClientProductIdRoute
+  '/client/recommendation/$id': typeof ClientRecommendationIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/sitemap.xml'
+    | '/analyst/commentary'
+    | '/analyst/create'
+    | '/analyst/preview'
+    | '/client/activity'
+    | '/client/profile'
+    | '/analyst/'
+    | '/client/'
+    | '/analyst/recommendation/$id'
+    | '/client/product/$id'
+    | '/client/recommendation/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/sitemap.xml'
+    | '/analyst/commentary'
+    | '/analyst/create'
+    | '/analyst/preview'
+    | '/client/activity'
+    | '/client/profile'
+    | '/analyst'
+    | '/client'
+    | '/analyst/recommendation/$id'
+    | '/client/product/$id'
+    | '/client/recommendation/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/sitemap.xml'
+    | '/analyst/commentary'
+    | '/analyst/create'
+    | '/analyst/preview'
+    | '/client/activity'
+    | '/client/profile'
+    | '/analyst/'
+    | '/client/'
+    | '/analyst/recommendation/$id'
+    | '/client/product/$id'
+    | '/client/recommendation/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AnalystCommentaryRoute: typeof AnalystCommentaryRoute
+  AnalystCreateRoute: typeof AnalystCreateRoute
+  AnalystPreviewRoute: typeof AnalystPreviewRoute
+  ClientActivityRoute: typeof ClientActivityRoute
+  ClientProfileRoute: typeof ClientProfileRoute
+  AnalystIndexRoute: typeof AnalystIndexRoute
+  ClientIndexRoute: typeof ClientIndexRoute
+  AnalystRecommendationIdRoute: typeof AnalystRecommendationIdRoute
+  ClientProductIdRoute: typeof ClientProductIdRoute
+  ClientRecommendationIdRoute: typeof ClientRecommendationIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +202,93 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/': {
+      id: '/client/'
+      path: '/client'
+      fullPath: '/client/'
+      preLoaderRoute: typeof ClientIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyst/': {
+      id: '/analyst/'
+      path: '/analyst'
+      fullPath: '/analyst/'
+      preLoaderRoute: typeof AnalystIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/profile': {
+      id: '/client/profile'
+      path: '/client/profile'
+      fullPath: '/client/profile'
+      preLoaderRoute: typeof ClientProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/activity': {
+      id: '/client/activity'
+      path: '/client/activity'
+      fullPath: '/client/activity'
+      preLoaderRoute: typeof ClientActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyst/preview': {
+      id: '/analyst/preview'
+      path: '/analyst/preview'
+      fullPath: '/analyst/preview'
+      preLoaderRoute: typeof AnalystPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyst/create': {
+      id: '/analyst/create'
+      path: '/analyst/create'
+      fullPath: '/analyst/create'
+      preLoaderRoute: typeof AnalystCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyst/commentary': {
+      id: '/analyst/commentary'
+      path: '/analyst/commentary'
+      fullPath: '/analyst/commentary'
+      preLoaderRoute: typeof AnalystCommentaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/recommendation/$id': {
+      id: '/client/recommendation/$id'
+      path: '/client/recommendation/$id'
+      fullPath: '/client/recommendation/$id'
+      preLoaderRoute: typeof ClientRecommendationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/product/$id': {
+      id: '/client/product/$id'
+      path: '/client/product/$id'
+      fullPath: '/client/product/$id'
+      preLoaderRoute: typeof ClientProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyst/recommendation/$id': {
+      id: '/analyst/recommendation/$id'
+      path: '/analyst/recommendation/$id'
+      fullPath: '/analyst/recommendation/$id'
+      preLoaderRoute: typeof AnalystRecommendationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AnalystCommentaryRoute: AnalystCommentaryRoute,
+  AnalystCreateRoute: AnalystCreateRoute,
+  AnalystPreviewRoute: AnalystPreviewRoute,
+  ClientActivityRoute: ClientActivityRoute,
+  ClientProfileRoute: ClientProfileRoute,
+  AnalystIndexRoute: AnalystIndexRoute,
+  ClientIndexRoute: ClientIndexRoute,
+  AnalystRecommendationIdRoute: AnalystRecommendationIdRoute,
+  ClientProductIdRoute: ClientProductIdRoute,
+  ClientRecommendationIdRoute: ClientRecommendationIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
