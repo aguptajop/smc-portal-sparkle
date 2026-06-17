@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientIndexRouteImport } from './routes/client.index'
 import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
@@ -21,6 +22,11 @@ import { Route as ClientRecommendationIdRouteImport } from './routes/client.reco
 import { Route as ClientProductIdRouteImport } from './routes/client.product.$id'
 import { Route as AnalystRecommendationIdRouteImport } from './routes/analyst.recommendation.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -79,6 +85,7 @@ const AnalystRecommendationIdRoute = AnalystRecommendationIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/sitemap.xml'
     | '/analyst/commentary'
     | '/analyst/create'
     | '/analyst/preview'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/sitemap.xml'
     | '/analyst/commentary'
     | '/analyst/create'
     | '/analyst/preview'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/sitemap.xml'
     | '/analyst/commentary'
     | '/analyst/create'
     | '/analyst/preview'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AnalystCommentaryRoute: typeof AnalystCommentaryRoute
   AnalystCreateRoute: typeof AnalystCreateRoute
   AnalystPreviewRoute: typeof AnalystPreviewRoute
@@ -175,6 +188,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -257,6 +277,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   AnalystCommentaryRoute: AnalystCommentaryRoute,
   AnalystCreateRoute: AnalystCreateRoute,
   AnalystPreviewRoute: AnalystPreviewRoute,
