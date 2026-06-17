@@ -14,6 +14,7 @@ import { Route as ClientIndexRouteImport } from './routes/client.index'
 import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
+import { Route as AnalystPreviewRouteImport } from './routes/analyst.preview'
 import { Route as AnalystCreateRouteImport } from './routes/analyst.create'
 import { Route as AnalystCommentaryRouteImport } from './routes/analyst.commentary'
 import { Route as ClientRecommendationIdRouteImport } from './routes/client.recommendation.$id'
@@ -43,6 +44,11 @@ const ClientProfileRoute = ClientProfileRouteImport.update({
 const ClientActivityRoute = ClientActivityRouteImport.update({
   id: '/client/activity',
   path: '/client/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalystPreviewRoute = AnalystPreviewRouteImport.update({
+  id: '/analyst/preview',
+  path: '/analyst/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalystCreateRoute = AnalystCreateRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
+  '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
   '/analyst/': typeof AnalystIndexRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
+  '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
   '/analyst': typeof AnalystIndexRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
+  '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
   '/analyst/': typeof AnalystIndexRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analyst/commentary'
     | '/analyst/create'
+    | '/analyst/preview'
     | '/client/activity'
     | '/client/profile'
     | '/analyst/'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analyst/commentary'
     | '/analyst/create'
+    | '/analyst/preview'
     | '/client/activity'
     | '/client/profile'
     | '/analyst'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analyst/commentary'
     | '/analyst/create'
+    | '/analyst/preview'
     | '/client/activity'
     | '/client/profile'
     | '/analyst/'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalystCommentaryRoute: typeof AnalystCommentaryRoute
   AnalystCreateRoute: typeof AnalystCreateRoute
+  AnalystPreviewRoute: typeof AnalystPreviewRoute
   ClientActivityRoute: typeof ClientActivityRoute
   ClientProfileRoute: typeof ClientProfileRoute
   AnalystIndexRoute: typeof AnalystIndexRoute
@@ -197,6 +210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analyst/preview': {
+      id: '/analyst/preview'
+      path: '/analyst/preview'
+      fullPath: '/analyst/preview'
+      preLoaderRoute: typeof AnalystPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/analyst/create': {
       id: '/analyst/create'
       path: '/analyst/create'
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalystCommentaryRoute: AnalystCommentaryRoute,
   AnalystCreateRoute: AnalystCreateRoute,
+  AnalystPreviewRoute: AnalystPreviewRoute,
   ClientActivityRoute: ClientActivityRoute,
   ClientProfileRoute: ClientProfileRoute,
   AnalystIndexRoute: AnalystIndexRoute,
