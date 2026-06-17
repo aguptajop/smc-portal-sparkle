@@ -15,6 +15,7 @@ import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
 import { Route as AnalystCreateRouteImport } from './routes/analyst.create'
+import { Route as AnalystCommentaryRouteImport } from './routes/analyst.commentary'
 import { Route as ClientRecommendationIdRouteImport } from './routes/client.recommendation.$id'
 import { Route as ClientProductIdRouteImport } from './routes/client.product.$id'
 import { Route as AnalystRecommendationIdRouteImport } from './routes/analyst.recommendation.$id'
@@ -49,6 +50,11 @@ const AnalystCreateRoute = AnalystCreateRouteImport.update({
   path: '/analyst/create',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnalystCommentaryRoute = AnalystCommentaryRouteImport.update({
+  id: '/analyst/commentary',
+  path: '/analyst/commentary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientRecommendationIdRoute = ClientRecommendationIdRouteImport.update({
   id: '/client/recommendation/$id',
   path: '/client/recommendation/$id',
@@ -67,6 +73,7 @@ const AnalystRecommendationIdRoute = AnalystRecommendationIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/analyst/commentary'
     | '/analyst/create'
     | '/client/activity'
     | '/client/profile'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/analyst/commentary'
     | '/analyst/create'
     | '/client/activity'
     | '/client/profile'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/analyst/commentary'
     | '/analyst/create'
     | '/client/activity'
     | '/client/profile'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalystCommentaryRoute: typeof AnalystCommentaryRoute
   AnalystCreateRoute: typeof AnalystCreateRoute
   ClientActivityRoute: typeof ClientActivityRoute
   ClientProfileRoute: typeof ClientProfileRoute
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalystCreateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analyst/commentary': {
+      id: '/analyst/commentary'
+      path: '/analyst/commentary'
+      fullPath: '/analyst/commentary'
+      preLoaderRoute: typeof AnalystCommentaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client/recommendation/$id': {
       id: '/client/recommendation/$id'
       path: '/client/recommendation/$id'
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalystCommentaryRoute: AnalystCommentaryRoute,
   AnalystCreateRoute: AnalystCreateRoute,
   ClientActivityRoute: ClientActivityRoute,
   ClientProfileRoute: ClientProfileRoute,
