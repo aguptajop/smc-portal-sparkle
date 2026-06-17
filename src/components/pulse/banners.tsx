@@ -70,7 +70,7 @@ export function NeedAttentionBanner() {
     (c) => Date.now() - +new Date(c.publishedAt) < 12 * 3600_000,
   ).length;
 
-  if (ar === 0 && updates === 0 && newComm === 0) return null;
+  if (ar + updates + newComm === 0) return null;
 
   return (
     <div className="rounded-lg border border-[var(--warning)]/30 bg-[var(--warning-soft)]/60 p-4">
