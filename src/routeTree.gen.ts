@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientIndexRouteImport } from './routes/client.index'
+import { Route as ClientProfileRouteImport } from './routes/client.profile'
+import { Route as ClientActivityRouteImport } from './routes/client.activity'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +24,48 @@ const ClientIndexRoute = ClientIndexRouteImport.update({
   path: '/client/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientProfileRoute = ClientProfileRouteImport.update({
+  id: '/client/profile',
+  path: '/client/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientActivityRoute = ClientActivityRouteImport.update({
+  id: '/client/activity',
+  path: '/client/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/client/activity': typeof ClientActivityRoute
+  '/client/profile': typeof ClientProfileRoute
   '/client/': typeof ClientIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/client/activity': typeof ClientActivityRoute
+  '/client/profile': typeof ClientProfileRoute
   '/client': typeof ClientIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/client/activity': typeof ClientActivityRoute
+  '/client/profile': typeof ClientProfileRoute
   '/client/': typeof ClientIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/client/'
+  fullPaths: '/' | '/client/activity' | '/client/profile' | '/client/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/client'
-  id: '__root__' | '/' | '/client/'
+  to: '/' | '/client/activity' | '/client/profile' | '/client'
+  id: '__root__' | '/' | '/client/activity' | '/client/profile' | '/client/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClientActivityRoute: typeof ClientActivityRoute
+  ClientProfileRoute: typeof ClientProfileRoute
   ClientIndexRoute: typeof ClientIndexRoute
 }
 
@@ -65,13 +85,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/profile': {
+      id: '/client/profile'
+      path: '/client/profile'
+      fullPath: '/client/profile'
+      preLoaderRoute: typeof ClientProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/activity': {
+      id: '/client/activity'
+      path: '/client/activity'
+      fullPath: '/client/activity'
+      preLoaderRoute: typeof ClientActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClientActivityRoute: ClientActivityRoute,
+  ClientProfileRoute: ClientProfileRoute,
   ClientIndexRoute: ClientIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
