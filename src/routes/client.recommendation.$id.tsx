@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PageHeader, PortalShell, SectionLabel } from "@/components/pulse/portal-shell";
 import { DirectionTag, StatusChip } from "@/components/pulse/status-chip";
+import type { Recommendation } from "@/lib/mock-data";
 import { recommendations, relativeTime } from "@/lib/mock-data";
 import { ArrowLeft, History } from "lucide-react";
 
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/client/recommendation/$id")({
 });
 
 function RecommendationDetail() {
-  const { rec } = Route.useLoaderData();
+  const { rec } = Route.useLoaderData() as { rec: Recommendation };
 
   return (
     <PortalShell portal="client" title={rec.instrument}>
