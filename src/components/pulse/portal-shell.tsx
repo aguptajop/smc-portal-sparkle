@@ -1,7 +1,21 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { Home, Activity, User, ListChecks, PlusCircle, Eye } from "lucide-react";
+import {
+  Home,
+  Activity,
+  User,
+  ListChecks,
+  PlusCircle,
+  Eye,
+  Bell,
+  Search,
+  Bookmark,
+  FileText,
+  TrendingUp,
+  HelpCircle,
+} from "lucide-react";
+import { unreadNotifications } from "@/lib/pulse-data";
 
 interface NavItem {
   to: string;
@@ -12,6 +26,8 @@ interface NavItem {
 const CLIENT_NAV: NavItem[] = [
   { to: "/client", label: "Home", icon: Home },
   { to: "/client/activity", label: "Activity", icon: Activity },
+  { to: "/client/reports", label: "Reports", icon: FileText },
+  { to: "/client/ipo", label: "IPO/OFS", icon: TrendingUp },
   { to: "/client/profile", label: "Profile", icon: User },
 ];
 
@@ -32,6 +48,7 @@ export function PortalShell({
 }) {
   const nav = portal === "client" ? CLIENT_NAV : ANALYST_NAV;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const unread = portal === "client" ? unreadNotifications() : 0;
 
   return (
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
@@ -53,7 +70,7 @@ export function PortalShell({
           )}
           <nav className="ml-auto hidden items-center gap-1 lg:flex">
             {nav.map((n) => {
-              const active = pathname === n.to;
+              const active = pathname === n.to || pathname.startsWith(n.to + "/");
               return (
                 <Link
                   key={n.to}
@@ -70,6 +87,43 @@ export function PortalShell({
                 </Link>
               );
             })}
+            {portal === "client" && (
+              <>
+                <Link
+                  to="/client/search"
+                  aria-label="Search"
+                  className="ml-1 grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  <Search className="size-4" />
+                </Link>
+                <Link
+                  to="/client/bookmarks"
+                  aria-label="Bookmarks"
+                  className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  <Bookmark className="size-4" />
+                </Link>
+                <Link
+                  to="/client/notifications"
+                  aria-label="Notifications"
+                  className="relative grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  <Bell className="size-4" />
+                  {unread > 0 && (
+                    <span className="absolute -right-0.5 -top-0.5 grid min-h-[16px] min-w-[16px] place-items-center rounded-full bg-[var(--danger)] px-1 text-[10px] font-bold text-white">
+                      {unread}
+                    </span>
+                  )}
+                </Link>
+                <Link
+                  to="/client/help"
+                  aria-label="Help"
+                  className="grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  <HelpCircle className="size-4" />
+                </Link>
+              </>
+            )}
             <Link
               to={portal === "client" ? "/analyst" : "/client"}
               className="ml-2 rounded-md border border-border px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:bg-secondary"
@@ -77,15 +131,41 @@ export function PortalShell({
               Switch to {portal === "client" ? "Analyst" : "Client"}
             </Link>
           </nav>
+          {portal === "client" && (
+            <div className="ml-auto flex items-center gap-1 lg:hidden">
+              <Link
+                to="/client/search"
+                aria-label="Search"
+                className="grid size-9 place-items-center rounded-md text-muted-foreground hover:bg-secondary"
+              >
+                <Search className="size-[18px]" />
+              </Link>
+              <Link
+                to="/client/notifications"
+                aria-label="Notifications"
+                className="relative grid size-9 place-items-center rounded-md text-muted-foreground hover:bg-secondary"
+              >
+                <Bell className="size-[18px]" />
+                {unread > 0 && (
+                  <span className="absolute right-1 top-1 grid min-h-[15px] min-w-[15px] place-items-center rounded-full bg-[var(--danger)] px-1 text-[9px] font-bold text-white">
+                    {unread}
+                  </span>
+                )}
+              </Link>
+            </div>
+          )}
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-5xl px-4 py-5 sm:py-7">{children}</main>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur lg:hidden">
-        <div className="mx-auto grid max-w-5xl grid-cols-3">
+        <div
+          className="mx-auto grid max-w-5xl"
+          style={{ gridTemplateColumns: `repeat(${nav.length}, minmax(0, 1fr))` }}
+        >
           {nav.map((n) => {
-            const active = pathname === n.to;
+            const active = pathname === n.to || pathname.startsWith(n.to + "/");
             return (
               <Link
                 key={n.to}
