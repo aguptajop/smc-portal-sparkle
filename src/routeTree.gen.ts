@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientIndexRouteImport } from './routes/client.index'
 import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
+import { Route as OnboardingSubscribeRouteImport } from './routes/onboarding.subscribe'
 import { Route as OnboardingKycRouteImport } from './routes/onboarding.kyc'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
@@ -47,6 +48,11 @@ const ClientIndexRoute = ClientIndexRouteImport.update({
 const AnalystIndexRoute = AnalystIndexRouteImport.update({
   id: '/analyst/',
   path: '/analyst/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingSubscribeRoute = OnboardingSubscribeRouteImport.update({
+  id: '/onboarding/subscribe',
+  path: '/onboarding/subscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingKycRoute = OnboardingKycRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
+  '/onboarding/subscribe': typeof OnboardingSubscribeRoute
   '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
+  '/onboarding/subscribe': typeof OnboardingSubscribeRoute
   '/analyst': typeof AnalystIndexRoute
   '/client': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/client/activity': typeof ClientActivityRoute
   '/client/profile': typeof ClientProfileRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
+  '/onboarding/subscribe': typeof OnboardingSubscribeRoute
   '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/client/activity'
     | '/client/profile'
     | '/onboarding/kyc'
+    | '/onboarding/subscribe'
     | '/analyst/'
     | '/client/'
     | '/analyst/recommendation/$id'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/client/activity'
     | '/client/profile'
     | '/onboarding/kyc'
+    | '/onboarding/subscribe'
     | '/analyst'
     | '/client'
     | '/analyst/recommendation/$id'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/client/activity'
     | '/client/profile'
     | '/onboarding/kyc'
+    | '/onboarding/subscribe'
     | '/analyst/'
     | '/client/'
     | '/analyst/recommendation/$id'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   ClientActivityRoute: typeof ClientActivityRoute
   ClientProfileRoute: typeof ClientProfileRoute
   OnboardingKycRoute: typeof OnboardingKycRoute
+  OnboardingSubscribeRoute: typeof OnboardingSubscribeRoute
   AnalystIndexRoute: typeof AnalystIndexRoute
   ClientIndexRoute: typeof ClientIndexRoute
   AnalystRecommendationIdRoute: typeof AnalystRecommendationIdRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/analyst'
       fullPath: '/analyst/'
       preLoaderRoute: typeof AnalystIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/subscribe': {
+      id: '/onboarding/subscribe'
+      path: '/onboarding/subscribe'
+      fullPath: '/onboarding/subscribe'
+      preLoaderRoute: typeof OnboardingSubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding/kyc': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientActivityRoute: ClientActivityRoute,
   ClientProfileRoute: ClientProfileRoute,
   OnboardingKycRoute: OnboardingKycRoute,
+  OnboardingSubscribeRoute: OnboardingSubscribeRoute,
   AnalystIndexRoute: AnalystIndexRoute,
   ClientIndexRoute: ClientIndexRoute,
   AnalystRecommendationIdRoute: AnalystRecommendationIdRoute,
