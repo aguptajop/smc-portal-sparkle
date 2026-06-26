@@ -17,6 +17,7 @@ import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
 import { Route as OnboardingSubscribeRouteImport } from './routes/onboarding.subscribe'
 import { Route as OnboardingKycRouteImport } from './routes/onboarding.kyc'
 import { Route as ClientSubscriptionRouteImport } from './routes/client.subscription'
+import { Route as ClientSettingsRouteImport } from './routes/client.settings'
 import { Route as ClientSearchRouteImport } from './routes/client.search'
 import { Route as ClientReportsRouteImport } from './routes/client.reports'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
@@ -69,6 +70,11 @@ const OnboardingKycRoute = OnboardingKycRouteImport.update({
 const ClientSubscriptionRoute = ClientSubscriptionRouteImport.update({
   id: '/client/subscription',
   path: '/client/subscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientSettingsRoute = ClientSettingsRouteImport.update({
+  id: '/client/settings',
+  path: '/client/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientSearchRoute = ClientSearchRouteImport.update({
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
+  '/client/settings': typeof ClientSettingsRoute
   '/client/subscription': typeof ClientSubscriptionRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
+  '/client/settings': typeof ClientSettingsRoute
   '/client/subscription': typeof ClientSubscriptionRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
+  '/client/settings': typeof ClientSettingsRoute
   '/client/subscription': typeof ClientSubscriptionRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/client/profile'
     | '/client/reports'
     | '/client/search'
+    | '/client/settings'
     | '/client/subscription'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/client/profile'
     | '/client/reports'
     | '/client/search'
+    | '/client/settings'
     | '/client/subscription'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/client/profile'
     | '/client/reports'
     | '/client/search'
+    | '/client/settings'
     | '/client/subscription'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   ClientProfileRoute: typeof ClientProfileRoute
   ClientReportsRoute: typeof ClientReportsRoute
   ClientSearchRoute: typeof ClientSearchRoute
+  ClientSettingsRoute: typeof ClientSettingsRoute
   ClientSubscriptionRoute: typeof ClientSubscriptionRoute
   OnboardingKycRoute: typeof OnboardingKycRoute
   OnboardingSubscribeRoute: typeof OnboardingSubscribeRoute
@@ -359,6 +372,13 @@ declare module '@tanstack/react-router' {
       path: '/client/subscription'
       fullPath: '/client/subscription'
       preLoaderRoute: typeof ClientSubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/settings': {
+      id: '/client/settings'
+      path: '/client/settings'
+      fullPath: '/client/settings'
+      preLoaderRoute: typeof ClientSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/client/search': {
@@ -469,6 +489,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientProfileRoute: ClientProfileRoute,
   ClientReportsRoute: ClientReportsRoute,
   ClientSearchRoute: ClientSearchRoute,
+  ClientSettingsRoute: ClientSettingsRoute,
   ClientSubscriptionRoute: ClientSubscriptionRoute,
   OnboardingKycRoute: OnboardingKycRoute,
   OnboardingSubscribeRoute: OnboardingSubscribeRoute,
