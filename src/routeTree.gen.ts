@@ -19,6 +19,7 @@ import { Route as OnboardingKycRouteImport } from './routes/onboarding.kyc'
 import { Route as ClientSearchRouteImport } from './routes/client.search'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
 import { Route as ClientNotificationsRouteImport } from './routes/client.notifications'
+import { Route as ClientBookmarksRouteImport } from './routes/client.bookmarks'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
 import { Route as AnalystPreviewRouteImport } from './routes/analyst.preview'
 import { Route as AnalystCreateRouteImport } from './routes/analyst.create'
@@ -77,6 +78,11 @@ const ClientNotificationsRoute = ClientNotificationsRouteImport.update({
   path: '/client/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientBookmarksRoute = ClientBookmarksRouteImport.update({
+  id: '/client/bookmarks',
+  path: '/client/bookmarks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientActivityRoute = ClientActivityRouteImport.update({
   id: '/client/activity',
   path: '/client/activity',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/search': typeof ClientSearchRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/search': typeof ClientSearchRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/search': typeof ClientSearchRoute
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/bookmarks'
     | '/client/notifications'
     | '/client/profile'
     | '/client/search'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/bookmarks'
     | '/client/notifications'
     | '/client/profile'
     | '/client/search'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/bookmarks'
     | '/client/notifications'
     | '/client/profile'
     | '/client/search'
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   AnalystCreateRoute: typeof AnalystCreateRoute
   AnalystPreviewRoute: typeof AnalystPreviewRoute
   ClientActivityRoute: typeof ClientActivityRoute
+  ClientBookmarksRoute: typeof ClientBookmarksRoute
   ClientNotificationsRoute: typeof ClientNotificationsRoute
   ClientProfileRoute: typeof ClientProfileRoute
   ClientSearchRoute: typeof ClientSearchRoute
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/bookmarks': {
+      id: '/client/bookmarks'
+      path: '/client/bookmarks'
+      fullPath: '/client/bookmarks'
+      preLoaderRoute: typeof ClientBookmarksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client/activity': {
       id: '/client/activity'
       path: '/client/activity'
@@ -383,6 +403,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalystCreateRoute: AnalystCreateRoute,
   AnalystPreviewRoute: AnalystPreviewRoute,
   ClientActivityRoute: ClientActivityRoute,
+  ClientBookmarksRoute: ClientBookmarksRoute,
   ClientNotificationsRoute: ClientNotificationsRoute,
   ClientProfileRoute: ClientProfileRoute,
   ClientSearchRoute: ClientSearchRoute,
