@@ -20,6 +20,7 @@ import { Route as ClientSearchRouteImport } from './routes/client.search'
 import { Route as ClientReportsRouteImport } from './routes/client.reports'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
 import { Route as ClientNotificationsRouteImport } from './routes/client.notifications'
+import { Route as ClientIpoRouteImport } from './routes/client.ipo'
 import { Route as ClientBookmarksRouteImport } from './routes/client.bookmarks'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
 import { Route as AnalystPreviewRouteImport } from './routes/analyst.preview'
@@ -84,6 +85,11 @@ const ClientNotificationsRoute = ClientNotificationsRouteImport.update({
   path: '/client/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientIpoRoute = ClientIpoRouteImport.update({
+  id: '/client/ipo',
+  path: '/client/ipo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientBookmarksRoute = ClientBookmarksRouteImport.update({
   id: '/client/bookmarks',
   path: '/client/bookmarks',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/bookmarks': typeof ClientBookmarksRoute
+  '/client/ipo': typeof ClientIpoRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/bookmarks': typeof ClientBookmarksRoute
+  '/client/ipo': typeof ClientIpoRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
   '/client/bookmarks': typeof ClientBookmarksRoute
+  '/client/ipo': typeof ClientIpoRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
@@ -200,6 +209,7 @@ export interface FileRouteTypes {
     | '/analyst/preview'
     | '/client/activity'
     | '/client/bookmarks'
+    | '/client/ipo'
     | '/client/notifications'
     | '/client/profile'
     | '/client/reports'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/analyst/preview'
     | '/client/activity'
     | '/client/bookmarks'
+    | '/client/ipo'
     | '/client/notifications'
     | '/client/profile'
     | '/client/reports'
@@ -242,6 +253,7 @@ export interface FileRouteTypes {
     | '/analyst/preview'
     | '/client/activity'
     | '/client/bookmarks'
+    | '/client/ipo'
     | '/client/notifications'
     | '/client/profile'
     | '/client/reports'
@@ -264,6 +276,7 @@ export interface RootRouteChildren {
   AnalystPreviewRoute: typeof AnalystPreviewRoute
   ClientActivityRoute: typeof ClientActivityRoute
   ClientBookmarksRoute: typeof ClientBookmarksRoute
+  ClientIpoRoute: typeof ClientIpoRoute
   ClientNotificationsRoute: typeof ClientNotificationsRoute
   ClientProfileRoute: typeof ClientProfileRoute
   ClientReportsRoute: typeof ClientReportsRoute
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/ipo': {
+      id: '/client/ipo'
+      path: '/client/ipo'
+      fullPath: '/client/ipo'
+      preLoaderRoute: typeof ClientIpoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client/bookmarks': {
       id: '/client/bookmarks'
       path: '/client/bookmarks'
@@ -424,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalystPreviewRoute: AnalystPreviewRoute,
   ClientActivityRoute: ClientActivityRoute,
   ClientBookmarksRoute: ClientBookmarksRoute,
+  ClientIpoRoute: ClientIpoRoute,
   ClientNotificationsRoute: ClientNotificationsRoute,
   ClientProfileRoute: ClientProfileRoute,
   ClientReportsRoute: ClientReportsRoute,
