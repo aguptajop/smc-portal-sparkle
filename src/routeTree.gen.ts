@@ -10,10 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientIndexRouteImport } from './routes/client.index'
 import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
+import { Route as OnboardingSubscribeRouteImport } from './routes/onboarding.subscribe'
+import { Route as OnboardingKycRouteImport } from './routes/onboarding.kyc'
+import { Route as ClientSubscriptionRouteImport } from './routes/client.subscription'
+import { Route as ClientSettingsRouteImport } from './routes/client.settings'
+import { Route as ClientSearchRouteImport } from './routes/client.search'
+import { Route as ClientReportsRouteImport } from './routes/client.reports'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
+import { Route as ClientNotificationsRouteImport } from './routes/client.notifications'
+import { Route as ClientIpoRouteImport } from './routes/client.ipo'
+import { Route as ClientHelpRouteImport } from './routes/client.help'
+import { Route as ClientBookmarksRouteImport } from './routes/client.bookmarks'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
 import { Route as AnalystPreviewRouteImport } from './routes/analyst.preview'
 import { Route as AnalystCreateRouteImport } from './routes/analyst.create'
@@ -25,6 +36,11 @@ import { Route as AnalystRecommendationIdRouteImport } from './routes/analyst.re
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -42,9 +58,59 @@ const AnalystIndexRoute = AnalystIndexRouteImport.update({
   path: '/analyst/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingSubscribeRoute = OnboardingSubscribeRouteImport.update({
+  id: '/onboarding/subscribe',
+  path: '/onboarding/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingKycRoute = OnboardingKycRouteImport.update({
+  id: '/onboarding/kyc',
+  path: '/onboarding/kyc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientSubscriptionRoute = ClientSubscriptionRouteImport.update({
+  id: '/client/subscription',
+  path: '/client/subscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientSettingsRoute = ClientSettingsRouteImport.update({
+  id: '/client/settings',
+  path: '/client/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientSearchRoute = ClientSearchRouteImport.update({
+  id: '/client/search',
+  path: '/client/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientReportsRoute = ClientReportsRouteImport.update({
+  id: '/client/reports',
+  path: '/client/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientProfileRoute = ClientProfileRouteImport.update({
   id: '/client/profile',
   path: '/client/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientNotificationsRoute = ClientNotificationsRouteImport.update({
+  id: '/client/notifications',
+  path: '/client/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientIpoRoute = ClientIpoRouteImport.update({
+  id: '/client/ipo',
+  path: '/client/ipo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientHelpRoute = ClientHelpRouteImport.update({
+  id: '/client/help',
+  path: '/client/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientBookmarksRoute = ClientBookmarksRouteImport.update({
+  id: '/client/bookmarks',
+  path: '/client/bookmarks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientActivityRoute = ClientActivityRouteImport.update({
@@ -85,12 +151,23 @@ const AnalystRecommendationIdRoute = AnalystRecommendationIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/bookmarks': typeof ClientBookmarksRoute
+  '/client/help': typeof ClientHelpRoute
+  '/client/ipo': typeof ClientIpoRoute
+  '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
+  '/client/reports': typeof ClientReportsRoute
+  '/client/search': typeof ClientSearchRoute
+  '/client/settings': typeof ClientSettingsRoute
+  '/client/subscription': typeof ClientSubscriptionRoute
+  '/onboarding/kyc': typeof OnboardingKycRoute
+  '/onboarding/subscribe': typeof OnboardingSubscribeRoute
   '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
@@ -99,12 +176,23 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/bookmarks': typeof ClientBookmarksRoute
+  '/client/help': typeof ClientHelpRoute
+  '/client/ipo': typeof ClientIpoRoute
+  '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
+  '/client/reports': typeof ClientReportsRoute
+  '/client/search': typeof ClientSearchRoute
+  '/client/settings': typeof ClientSettingsRoute
+  '/client/subscription': typeof ClientSubscriptionRoute
+  '/onboarding/kyc': typeof OnboardingKycRoute
+  '/onboarding/subscribe': typeof OnboardingSubscribeRoute
   '/analyst': typeof AnalystIndexRoute
   '/client': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
@@ -114,12 +202,23 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/analyst/commentary': typeof AnalystCommentaryRoute
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/bookmarks': typeof ClientBookmarksRoute
+  '/client/help': typeof ClientHelpRoute
+  '/client/ipo': typeof ClientIpoRoute
+  '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
+  '/client/reports': typeof ClientReportsRoute
+  '/client/search': typeof ClientSearchRoute
+  '/client/settings': typeof ClientSettingsRoute
+  '/client/subscription': typeof ClientSubscriptionRoute
+  '/onboarding/kyc': typeof OnboardingKycRoute
+  '/onboarding/subscribe': typeof OnboardingSubscribeRoute
   '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
@@ -130,12 +229,23 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/sitemap.xml'
     | '/analyst/commentary'
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/bookmarks'
+    | '/client/help'
+    | '/client/ipo'
+    | '/client/notifications'
     | '/client/profile'
+    | '/client/reports'
+    | '/client/search'
+    | '/client/settings'
+    | '/client/subscription'
+    | '/onboarding/kyc'
+    | '/onboarding/subscribe'
     | '/analyst/'
     | '/client/'
     | '/analyst/recommendation/$id'
@@ -144,12 +254,23 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/sitemap.xml'
     | '/analyst/commentary'
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/bookmarks'
+    | '/client/help'
+    | '/client/ipo'
+    | '/client/notifications'
     | '/client/profile'
+    | '/client/reports'
+    | '/client/search'
+    | '/client/settings'
+    | '/client/subscription'
+    | '/onboarding/kyc'
+    | '/onboarding/subscribe'
     | '/analyst'
     | '/client'
     | '/analyst/recommendation/$id'
@@ -158,12 +279,23 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/sitemap.xml'
     | '/analyst/commentary'
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/bookmarks'
+    | '/client/help'
+    | '/client/ipo'
+    | '/client/notifications'
     | '/client/profile'
+    | '/client/reports'
+    | '/client/search'
+    | '/client/settings'
+    | '/client/subscription'
+    | '/onboarding/kyc'
+    | '/onboarding/subscribe'
     | '/analyst/'
     | '/client/'
     | '/analyst/recommendation/$id'
@@ -173,12 +305,23 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AnalystCommentaryRoute: typeof AnalystCommentaryRoute
   AnalystCreateRoute: typeof AnalystCreateRoute
   AnalystPreviewRoute: typeof AnalystPreviewRoute
   ClientActivityRoute: typeof ClientActivityRoute
+  ClientBookmarksRoute: typeof ClientBookmarksRoute
+  ClientHelpRoute: typeof ClientHelpRoute
+  ClientIpoRoute: typeof ClientIpoRoute
+  ClientNotificationsRoute: typeof ClientNotificationsRoute
   ClientProfileRoute: typeof ClientProfileRoute
+  ClientReportsRoute: typeof ClientReportsRoute
+  ClientSearchRoute: typeof ClientSearchRoute
+  ClientSettingsRoute: typeof ClientSettingsRoute
+  ClientSubscriptionRoute: typeof ClientSubscriptionRoute
+  OnboardingKycRoute: typeof OnboardingKycRoute
+  OnboardingSubscribeRoute: typeof OnboardingSubscribeRoute
   AnalystIndexRoute: typeof AnalystIndexRoute
   ClientIndexRoute: typeof ClientIndexRoute
   AnalystRecommendationIdRoute: typeof AnalystRecommendationIdRoute
@@ -193,6 +336,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -216,11 +366,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalystIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding/subscribe': {
+      id: '/onboarding/subscribe'
+      path: '/onboarding/subscribe'
+      fullPath: '/onboarding/subscribe'
+      preLoaderRoute: typeof OnboardingSubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/kyc': {
+      id: '/onboarding/kyc'
+      path: '/onboarding/kyc'
+      fullPath: '/onboarding/kyc'
+      preLoaderRoute: typeof OnboardingKycRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/subscription': {
+      id: '/client/subscription'
+      path: '/client/subscription'
+      fullPath: '/client/subscription'
+      preLoaderRoute: typeof ClientSubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/settings': {
+      id: '/client/settings'
+      path: '/client/settings'
+      fullPath: '/client/settings'
+      preLoaderRoute: typeof ClientSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/search': {
+      id: '/client/search'
+      path: '/client/search'
+      fullPath: '/client/search'
+      preLoaderRoute: typeof ClientSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/reports': {
+      id: '/client/reports'
+      path: '/client/reports'
+      fullPath: '/client/reports'
+      preLoaderRoute: typeof ClientReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client/profile': {
       id: '/client/profile'
       path: '/client/profile'
       fullPath: '/client/profile'
       preLoaderRoute: typeof ClientProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/notifications': {
+      id: '/client/notifications'
+      path: '/client/notifications'
+      fullPath: '/client/notifications'
+      preLoaderRoute: typeof ClientNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/ipo': {
+      id: '/client/ipo'
+      path: '/client/ipo'
+      fullPath: '/client/ipo'
+      preLoaderRoute: typeof ClientIpoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/help': {
+      id: '/client/help'
+      path: '/client/help'
+      fullPath: '/client/help'
+      preLoaderRoute: typeof ClientHelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/bookmarks': {
+      id: '/client/bookmarks'
+      path: '/client/bookmarks'
+      fullPath: '/client/bookmarks'
+      preLoaderRoute: typeof ClientBookmarksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/client/activity': {
@@ -277,12 +497,23 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AnalystCommentaryRoute: AnalystCommentaryRoute,
   AnalystCreateRoute: AnalystCreateRoute,
   AnalystPreviewRoute: AnalystPreviewRoute,
   ClientActivityRoute: ClientActivityRoute,
+  ClientBookmarksRoute: ClientBookmarksRoute,
+  ClientHelpRoute: ClientHelpRoute,
+  ClientIpoRoute: ClientIpoRoute,
+  ClientNotificationsRoute: ClientNotificationsRoute,
   ClientProfileRoute: ClientProfileRoute,
+  ClientReportsRoute: ClientReportsRoute,
+  ClientSearchRoute: ClientSearchRoute,
+  ClientSettingsRoute: ClientSettingsRoute,
+  ClientSubscriptionRoute: ClientSubscriptionRoute,
+  OnboardingKycRoute: OnboardingKycRoute,
+  OnboardingSubscribeRoute: OnboardingSubscribeRoute,
   AnalystIndexRoute: AnalystIndexRoute,
   ClientIndexRoute: ClientIndexRoute,
   AnalystRecommendationIdRoute: AnalystRecommendationIdRoute,

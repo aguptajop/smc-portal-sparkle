@@ -66,9 +66,16 @@ function Landing() {
           />
         </div>
 
+        <div className="mt-6 flex flex-wrap items-center gap-3 text-[12px] text-muted-foreground">
+          <Link to="/auth" className="font-semibold text-[var(--smc-blue)] hover:underline">Sign in</Link>
+          <span aria-hidden>·</span>
+          <Link to="/onboarding/subscribe" className="font-semibold text-[var(--smc-blue)] hover:underline">Open an account</Link>
+          <span aria-hidden>·</span>
+          <Link to="/onboarding/kyc" className="font-semibold text-[var(--smc-blue)] hover:underline">Complete KYC</Link>
+        </div>
+
         <p className="mt-10 text-[12px] text-muted-foreground">
-          SMC Pulse is not a trading terminal, portfolio tracker, or CRM. It is your research
-          desk.
+          SMC Pulse is not a trading terminal, portfolio tracker, or CRM. It is your research desk.
         </p>
       </main>
     </div>

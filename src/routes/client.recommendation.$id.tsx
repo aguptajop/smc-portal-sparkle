@@ -4,6 +4,7 @@ import { DirectionTag, StatusChip } from "@/components/pulse/status-chip";
 import type { Recommendation } from "@/lib/mock-data";
 import { recommendations, relativeTime } from "@/lib/mock-data";
 import { ArrowLeft, History } from "lucide-react";
+import { ReactionBar } from "@/components/pulse/reactions";
 
 export const Route = createFileRoute("/client/recommendation/$id")({
   loader: ({ params }) => {
@@ -59,6 +60,7 @@ function RecommendationDetail() {
             Updated {relativeTime(rec.updatedAt)}
           </p>
         </div>
+        <ReactionBar />
       </div>
 
       <SectionLabel>Timeline</SectionLabel>
