@@ -61,7 +61,6 @@ function RecommendationDetail() {
           </p>
         </div>
         <ReactionBar />
-        </div>
       </div>
 
       <SectionLabel>Timeline</SectionLabel>
