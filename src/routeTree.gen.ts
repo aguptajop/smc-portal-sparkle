@@ -17,6 +17,7 @@ import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
 import { Route as OnboardingSubscribeRouteImport } from './routes/onboarding.subscribe'
 import { Route as OnboardingKycRouteImport } from './routes/onboarding.kyc'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
+import { Route as ClientNotificationsRouteImport } from './routes/client.notifications'
 import { Route as ClientActivityRouteImport } from './routes/client.activity'
 import { Route as AnalystPreviewRouteImport } from './routes/analyst.preview'
 import { Route as AnalystCreateRouteImport } from './routes/analyst.create'
@@ -65,6 +66,11 @@ const ClientProfileRoute = ClientProfileRouteImport.update({
   path: '/client/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientNotificationsRoute = ClientNotificationsRouteImport.update({
+  id: '/client/notifications',
+  path: '/client/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientActivityRoute = ClientActivityRouteImport.update({
   id: '/client/activity',
   path: '/client/activity',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -144,6 +152,7 @@ export interface FileRoutesById {
   '/analyst/create': typeof AnalystCreateRoute
   '/analyst/preview': typeof AnalystPreviewRoute
   '/client/activity': typeof ClientActivityRoute
+  '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/notifications'
     | '/client/profile'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/notifications'
     | '/client/profile'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/analyst/create'
     | '/analyst/preview'
     | '/client/activity'
+    | '/client/notifications'
     | '/client/profile'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   AnalystCreateRoute: typeof AnalystCreateRoute
   AnalystPreviewRoute: typeof AnalystPreviewRoute
   ClientActivityRoute: typeof ClientActivityRoute
+  ClientNotificationsRoute: typeof ClientNotificationsRoute
   ClientProfileRoute: typeof ClientProfileRoute
   OnboardingKycRoute: typeof OnboardingKycRoute
   OnboardingSubscribeRoute: typeof OnboardingSubscribeRoute
@@ -283,6 +296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/notifications': {
+      id: '/client/notifications'
+      path: '/client/notifications'
+      fullPath: '/client/notifications'
+      preLoaderRoute: typeof ClientNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client/activity': {
       id: '/client/activity'
       path: '/client/activity'
@@ -343,6 +363,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalystCreateRoute: AnalystCreateRoute,
   AnalystPreviewRoute: AnalystPreviewRoute,
   ClientActivityRoute: ClientActivityRoute,
+  ClientNotificationsRoute: ClientNotificationsRoute,
   ClientProfileRoute: ClientProfileRoute,
   OnboardingKycRoute: OnboardingKycRoute,
   OnboardingSubscribeRoute: OnboardingSubscribeRoute,
