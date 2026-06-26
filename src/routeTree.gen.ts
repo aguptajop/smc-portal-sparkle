@@ -17,6 +17,7 @@ import { Route as AnalystIndexRouteImport } from './routes/analyst.index'
 import { Route as OnboardingSubscribeRouteImport } from './routes/onboarding.subscribe'
 import { Route as OnboardingKycRouteImport } from './routes/onboarding.kyc'
 import { Route as ClientSearchRouteImport } from './routes/client.search'
+import { Route as ClientReportsRouteImport } from './routes/client.reports'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
 import { Route as ClientNotificationsRouteImport } from './routes/client.notifications'
 import { Route as ClientBookmarksRouteImport } from './routes/client.bookmarks'
@@ -66,6 +67,11 @@ const OnboardingKycRoute = OnboardingKycRouteImport.update({
 const ClientSearchRoute = ClientSearchRouteImport.update({
   id: '/client/search',
   path: '/client/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientReportsRoute = ClientReportsRouteImport.update({
+  id: '/client/reports',
+  path: '/client/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientProfileRoute = ClientProfileRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
+  '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
+  '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/profile': typeof ClientProfileRoute
+  '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
   '/onboarding/kyc': typeof OnboardingKycRoute
   '/onboarding/subscribe': typeof OnboardingSubscribeRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/client/bookmarks'
     | '/client/notifications'
     | '/client/profile'
+    | '/client/reports'
     | '/client/search'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/client/bookmarks'
     | '/client/notifications'
     | '/client/profile'
+    | '/client/reports'
     | '/client/search'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/client/bookmarks'
     | '/client/notifications'
     | '/client/profile'
+    | '/client/reports'
     | '/client/search'
     | '/onboarding/kyc'
     | '/onboarding/subscribe'
@@ -254,6 +266,7 @@ export interface RootRouteChildren {
   ClientBookmarksRoute: typeof ClientBookmarksRoute
   ClientNotificationsRoute: typeof ClientNotificationsRoute
   ClientProfileRoute: typeof ClientProfileRoute
+  ClientReportsRoute: typeof ClientReportsRoute
   ClientSearchRoute: typeof ClientSearchRoute
   OnboardingKycRoute: typeof OnboardingKycRoute
   OnboardingSubscribeRoute: typeof OnboardingSubscribeRoute
@@ -320,6 +333,13 @@ declare module '@tanstack/react-router' {
       path: '/client/search'
       fullPath: '/client/search'
       preLoaderRoute: typeof ClientSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/reports': {
+      id: '/client/reports'
+      path: '/client/reports'
+      fullPath: '/client/reports'
+      preLoaderRoute: typeof ClientReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/client/profile': {
@@ -406,6 +426,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientBookmarksRoute: ClientBookmarksRoute,
   ClientNotificationsRoute: ClientNotificationsRoute,
   ClientProfileRoute: ClientProfileRoute,
+  ClientReportsRoute: ClientReportsRoute,
   ClientSearchRoute: ClientSearchRoute,
   OnboardingKycRoute: OnboardingKycRoute,
   OnboardingSubscribeRoute: OnboardingSubscribeRoute,
