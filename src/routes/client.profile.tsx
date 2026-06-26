@@ -1,6 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader, PortalShell, SectionLabel } from "@/components/pulse/portal-shell";
-import { LogOut, Mail, Phone, Shield, FileText } from "lucide-react";
+import {
+  LogOut,
+  Mail,
+  Phone,
+  Shield,
+  FileText,
+  Bell,
+  Bookmark,
+  Settings,
+  LifeBuoy,
+  Receipt,
+  ChevronRight,
+} from "lucide-react";
 
 export const Route = createFileRoute("/client/profile")({
   head: () => ({
@@ -43,26 +55,36 @@ function Profile() {
           { name: "Index Trading", until: "Renews 02 Sep 2026" },
           { name: "Commodity Mantra", until: "Renews 21 Jul 2026" },
         ].map((s) => (
-          <div
+          <Link
+            to="/client/subscription"
             key={s.name}
-            className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 text-[13px]"
+            className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 text-[13px] hover:border-[var(--smc-teal)]/40"
           >
             <span className="font-medium text-foreground">{s.name}</span>
             <span className="text-[12px] text-muted-foreground">{s.until}</span>
-          </div>
+          </Link>
         ))}
+      </div>
+
+      <SectionLabel>Quick access</SectionLabel>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <Tile to="/client/notifications" icon={<Bell className="size-4" />} label="Notifications" />
+        <Tile to="/client/bookmarks" icon={<Bookmark className="size-4" />} label="Saved" />
+        <Tile to="/client/subscription" icon={<Receipt className="size-4" />} label="Billing" />
+        <Tile to="/client/settings" icon={<Settings className="size-4" />} label="Settings" />
       </div>
 
       <SectionLabel>Support & legal</SectionLabel>
       <div className="grid gap-2">
-        <Row icon={<Shield className="size-4" />} label="Compliance & risk disclosure" />
-        <Row icon={<FileText className="size-4" />} label="Terms of service" />
-        <Row icon={<Mail className="size-4" />} label="Contact research desk" />
+        <RowLink to="/client/help" icon={<LifeBuoy className="size-4" />} label="Help & support" />
+        <RowLink to="/client/help" icon={<Shield className="size-4" />} label="Compliance & risk disclosure" />
+        <RowLink to="/client/help" icon={<FileText className="size-4" />} label="Terms of service" />
+        <RowLink to="/client/help" icon={<Mail className="size-4" />} label="Contact research desk" />
       </div>
 
       <div className="mt-6">
         <Link
-          to="/"
+          to="/auth"
           className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-[13px] font-medium text-foreground hover:bg-secondary"
         >
           <LogOut className="size-4" /> Log out
@@ -83,11 +105,27 @@ function Info({ icon, k, v }: { icon: React.ReactNode; k: string; v: string }) {
   );
 }
 
-function Row({ icon, label }: { icon: React.ReactNode; label: string }) {
+function RowLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
   return (
-    <button className="flex w-full items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-left text-[13px] font-medium text-foreground hover:bg-secondary">
+    <Link
+      to={to}
+      className="flex w-full items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-left text-[13px] font-medium text-foreground hover:bg-secondary"
+    >
       <span className="text-muted-foreground">{icon}</span>
+      <span className="flex-1">{label}</span>
+      <ChevronRight className="size-4 text-muted-foreground" />
+    </Link>
+  );
+}
+
+function Tile({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
+  return (
+    <Link
+      to={to}
+      className="flex flex-col items-center justify-center gap-1.5 rounded-lg border border-border bg-card px-3 py-4 text-[12px] font-medium text-foreground hover:border-[var(--smc-teal)]/40"
+    >
+      <span className="grid size-8 place-items-center rounded-md bg-accent text-[var(--smc-blue)]">{icon}</span>
       {label}
-    </button>
+    </Link>
   );
 }
