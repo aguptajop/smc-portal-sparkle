@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PortalShell, SectionLabel } from "@/components/pulse/portal-shell";
 import { ReactionBar } from "@/components/pulse/reactions";
-import { ipos } from "@/lib/pulse-data";
+import { type IPO, ipos } from "@/lib/pulse-data";
 import { ArrowLeft, Download, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/client/ipo/$id")({
 });
 
 function IpoDetail() {
-  const { i } = Route.useLoaderData();
+  const { i } = Route.useLoaderData() as { i: IPO };
   return (
     <PortalShell portal="client" title="IPO Review">
       <Link

@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PortalShell } from "@/components/pulse/portal-shell";
 import { ProductBadge } from "@/components/pulse/product-badge";
 import { ReactionBar } from "@/components/pulse/reactions";
-import { getCommentary, getProduct, relativeTime } from "@/lib/mock-data";
+import { type Commentary, getCommentary, getProduct, relativeTime } from "@/lib/mock-data";
 import { ArrowLeft, Pin } from "lucide-react";
 
 export const Route = createFileRoute("/client/commentary/$id")({
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/client/commentary/$id")({
 });
 
 function CommentaryDetail() {
-  const { c } = Route.useLoaderData();
+  const { c } = Route.useLoaderData() as { c: Commentary };
   const product = getProduct(c.productId);
   return (
     <PortalShell portal="client" title={c.type}>

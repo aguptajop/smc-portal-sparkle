@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PortalShell } from "@/components/pulse/portal-shell";
 import { ReactionBar } from "@/components/pulse/reactions";
-import { ofsList } from "@/lib/pulse-data";
+import { type OFS, ofsList } from "@/lib/pulse-data";
 import { ArrowLeft, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/client/ofs/$id")({
 });
 
 function OfsDetail() {
-  const { o } = Route.useLoaderData();
+  const { o } = Route.useLoaderData() as { o: OFS };
   const premium = (((o.cmp - o.floorPrice) / o.floorPrice) * 100).toFixed(1);
   return (
     <PortalShell portal="client" title="OFS Review">

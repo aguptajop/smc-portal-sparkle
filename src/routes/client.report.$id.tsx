@@ -3,7 +3,7 @@ import { PortalShell } from "@/components/pulse/portal-shell";
 import { ProductBadge } from "@/components/pulse/product-badge";
 import { ReactionBar } from "@/components/pulse/reactions";
 import { getProduct } from "@/lib/mock-data";
-import { reports } from "@/lib/pulse-data";
+import { type ResearchReport, reports } from "@/lib/pulse-data";
 import { ArrowLeft, Download, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/client/report/$id")({
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/client/report/$id")({
 });
 
 function ReportDetail() {
-  const { r } = Route.useLoaderData();
+  const { r } = Route.useLoaderData() as { r: ResearchReport };
   const product = r.productId ? getProduct(r.productId) : undefined;
   return (
     <PortalShell portal="client" title="Report">

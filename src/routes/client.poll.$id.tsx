@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PortalShell } from "@/components/pulse/portal-shell";
 import { ProductBadge } from "@/components/pulse/product-badge";
-import { getPoll, getProduct } from "@/lib/mock-data";
+import { type Poll, getPoll, getProduct } from "@/lib/mock-data";
 import { ArrowLeft, Check, Vote } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/client/poll/$id")({
 });
 
 function PollDetail() {
-  const { p } = Route.useLoaderData();
+  const { p } = Route.useLoaderData() as { p: Poll };
   const product = getProduct(p.productId);
   const [voted, setVoted] = useState<string | null>(p.userVote ?? null);
   const [selected, setSelected] = useState<string | null>(null);
