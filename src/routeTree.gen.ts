@@ -21,6 +21,7 @@ import { Route as ClientSettingsRouteImport } from './routes/client.settings'
 import { Route as ClientSearchRouteImport } from './routes/client.search'
 import { Route as ClientReportsRouteImport } from './routes/client.reports'
 import { Route as ClientProfileRouteImport } from './routes/client.profile'
+import { Route as ClientProductsRouteImport } from './routes/client.products'
 import { Route as ClientNotificationsRouteImport } from './routes/client.notifications'
 import { Route as ClientIpoRouteImport } from './routes/client.ipo'
 import { Route as ClientHelpRouteImport } from './routes/client.help'
@@ -93,6 +94,11 @@ const ClientProfileRoute = ClientProfileRouteImport.update({
   path: '/client/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientProductsRoute = ClientProductsRouteImport.update({
+  id: '/client/products',
+  path: '/client/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientNotificationsRoute = ClientNotificationsRouteImport.update({
   id: '/client/notifications',
   path: '/client/notifications',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/client/help': typeof ClientHelpRoute
   '/client/ipo': typeof ClientIpoRoute
   '/client/notifications': typeof ClientNotificationsRoute
+  '/client/products': typeof ClientProductsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/client/help': typeof ClientHelpRoute
   '/client/ipo': typeof ClientIpoRoute
   '/client/notifications': typeof ClientNotificationsRoute
+  '/client/products': typeof ClientProductsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/client/help': typeof ClientHelpRoute
   '/client/ipo': typeof ClientIpoRoute
   '/client/notifications': typeof ClientNotificationsRoute
+  '/client/products': typeof ClientProductsRoute
   '/client/profile': typeof ClientProfileRoute
   '/client/reports': typeof ClientReportsRoute
   '/client/search': typeof ClientSearchRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/client/help'
     | '/client/ipo'
     | '/client/notifications'
+    | '/client/products'
     | '/client/profile'
     | '/client/reports'
     | '/client/search'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/client/help'
     | '/client/ipo'
     | '/client/notifications'
+    | '/client/products'
     | '/client/profile'
     | '/client/reports'
     | '/client/search'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/client/help'
     | '/client/ipo'
     | '/client/notifications'
+    | '/client/products'
     | '/client/profile'
     | '/client/reports'
     | '/client/search'
@@ -315,6 +327,7 @@ export interface RootRouteChildren {
   ClientHelpRoute: typeof ClientHelpRoute
   ClientIpoRoute: typeof ClientIpoRoute
   ClientNotificationsRoute: typeof ClientNotificationsRoute
+  ClientProductsRoute: typeof ClientProductsRoute
   ClientProfileRoute: typeof ClientProfileRoute
   ClientReportsRoute: typeof ClientReportsRoute
   ClientSearchRoute: typeof ClientSearchRoute
@@ -415,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/products': {
+      id: '/client/products'
+      path: '/client/products'
+      fullPath: '/client/products'
+      preLoaderRoute: typeof ClientProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client/notifications': {
       id: '/client/notifications'
       path: '/client/notifications'
@@ -507,6 +527,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientHelpRoute: ClientHelpRoute,
   ClientIpoRoute: ClientIpoRoute,
   ClientNotificationsRoute: ClientNotificationsRoute,
+  ClientProductsRoute: ClientProductsRoute,
   ClientProfileRoute: ClientProfileRoute,
   ClientReportsRoute: ClientReportsRoute,
   ClientSearchRoute: ClientSearchRoute,
