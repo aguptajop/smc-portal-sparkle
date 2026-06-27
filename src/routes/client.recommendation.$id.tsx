@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { PageHeader, PortalShell, SectionLabel } from "@/components/pulse/portal-shell";
+import { PortalShell, SectionLabel } from "@/components/pulse/portal-shell";
 import { DirectionTag, StatusChip } from "@/components/pulse/status-chip";
 import type { Recommendation } from "@/lib/mock-data";
-import { recommendations, relativeTime } from "@/lib/mock-data";
-import { ArrowLeft, History } from "lucide-react";
+import { getProduct, recommendations, relativeTime } from "@/lib/mock-data";
+import { ArrowLeft, AlertTriangle, ChevronDown } from "lucide-react";
 import { ReactionBar } from "@/components/pulse/reactions";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/client/recommendation/$id")({
   loader: ({ params }) => {
@@ -26,82 +28,150 @@ export const Route = createFileRoute("/client/recommendation/$id")({
 
 function RecommendationDetail() {
   const { rec } = Route.useLoaderData() as { rec: Recommendation };
+  const product = getProduct(rec.productId);
+  const [showRationale, setShowRationale] = useState(false);
+
+  // Build chronological timeline + corrections as merged events
+  const events = [
+    ...rec.updates.map((u) => ({ kind: "update" as const, at: u.at, label: u.label, detail: u.detail, type: u.type })),
+    ...(rec.corrections ?? []).map((c) => ({
+      kind: "correction" as const,
+      at: c.at,
+      label: `${c.field} corrected`,
+      previous: c.previous,
+      next: c.next,
+    })),
+  ].sort((a, b) => +new Date(a.at) - +new Date(b.at));
 
   return (
     <PortalShell portal="client" title={rec.instrument}>
       <Link
-        to={`/client/product/${rec.productId}`}
-        className="mb-3 inline-flex items-center gap-1 text-[12px] font-medium text-muted-foreground hover:text-foreground"
+        to="/client/product/$id"
+        params={{ id: rec.productId }}
+        className="mb-3 inline-flex min-h-9 items-center gap-1 text-[12px] font-medium text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="size-3.5" /> Back to product
+        <ArrowLeft className="size-3.5" /> Back to {product?.name ?? "product"}
       </Link>
 
-      <div className="rounded-lg border border-border bg-card p-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <DirectionTag dir={rec.direction} />
-          <h1 className="text-[20px] font-bold tabular text-foreground">{rec.instrument}</h1>
-          <StatusChip status={rec.status} />
-        </div>
-        {rec.rationale && (
-          <p className="mt-2 text-[13px] leading-relaxed text-foreground/85">{rec.rationale}</p>
-        )}
+      {/* Header: direction + instrument + status */}
+      <div className="flex flex-wrap items-center gap-2">
+        <DirectionTag dir={rec.direction} />
+        <h1 className="text-[22px] font-bold tabular text-foreground">{rec.instrument}</h1>
+        <StatusChip status={rec.status} pnlPct={rec.pnlPct} />
+      </div>
+      <p className="mt-1 text-[12px] text-muted-foreground">
+        {assetLabel(rec.assetClass)}
+        {rec.strike ? ` · ${rec.strike} ${rec.optionType ?? ""}` : ""}
+        {rec.expiry ? ` · Exp ${rec.expiry}` : ""}
+      </p>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-4">
-          <Stat k="Entry" v={rec.entry} />
-          <Stat k="Stop loss" v={rec.sl} tone="danger" />
-          <Stat k="Target 1" v={rec.targets[0]} tone="success" />
-          <Stat k="Target 2" v={rec.targets[1] ?? "—"} tone="success" />
-        </div>
-
-        <div className="mt-4 rounded-md bg-accent/60 px-3 py-2 text-[13px]">
-          <span className="font-semibold text-[var(--smc-blue)]">Latest action:</span>{" "}
-          {rec.latestAction}
-          <p className="mt-0.5 text-[11px] text-muted-foreground">
-            Updated {relativeTime(rec.updatedAt)}
-          </p>
-        </div>
-        <ReactionBar />
+      {/* Key values */}
+      <div className="mt-4 grid grid-cols-2 gap-3 rounded-lg border border-border bg-card p-4 text-[13px] sm:grid-cols-4">
+        <Stat k="Entry" v={rec.entry} />
+        <Stat k="Stop loss" v={rec.sl} tone="danger" />
+        <Stat k="Target 1" v={rec.targets[0]} tone="success" />
+        <Stat k="Target 2" v={rec.targets[1] ?? "—"} tone={rec.targets[1] ? "success" : undefined} />
+        {rec.targets[2] && <Stat k="Target 3" v={rec.targets[2]} tone="success" />}
       </div>
 
-      <SectionLabel>Timeline</SectionLabel>
-      <ol className="relative ml-3 space-y-4 border-l border-border pl-5">
-        {rec.updates.map((u, i) => (
-          <li key={i} className="relative">
-            <span className="absolute -left-[27px] top-1.5 size-2.5 rounded-full bg-[var(--smc-teal)] ring-2 ring-card" />
-            <p className="text-[13px] font-semibold text-foreground">{u.label}</p>
-            {u.detail && <p className="text-[12px] text-foreground/80">{u.detail}</p>}
-            <p className="text-[11px] text-muted-foreground">{relativeTime(u.at)}</p>
-          </li>
-        ))}
-      </ol>
+      {/* Action banner */}
+      {rec.status === "ACTION_REQUIRED" && (
+        <div className="mt-3 flex items-start gap-2 rounded-lg border-l-[3px] border-l-[var(--warning)] bg-[var(--warning-soft)]/60 px-4 py-3">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-[var(--warning)]" />
+          <p className="text-[13px] font-semibold text-foreground">{rec.latestAction}</p>
+        </div>
+      )}
 
-      {rec.corrections && rec.corrections.length > 0 && (
+      {/* Rationale */}
+      {rec.rationale && (
         <>
-          <SectionLabel>
-            Corrections
-          </SectionLabel>
-          <div className="space-y-2">
-            {rec.corrections.map((c, i) => (
-              <div
-                key={i}
-                className="flex items-start gap-3 rounded-md border border-[var(--danger)]/20 bg-[var(--danger-soft)]/40 p-3 text-[12px]"
+          <SectionLabel>Rationale</SectionLabel>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <p
+              className={cn(
+                "text-[13px] leading-relaxed text-foreground/90",
+                !showRationale && "line-clamp-2",
+              )}
+            >
+              {rec.rationale}
+            </p>
+            {rec.rationale.length > 90 && (
+              <button
+                onClick={() => setShowRationale((v) => !v)}
+                className="mt-2 inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--smc-blue)] hover:underline"
               >
-                <History className="mt-0.5 size-4 shrink-0 text-[var(--danger)]" />
-                <div className="min-w-0">
-                  <p className="font-semibold text-foreground">{c.field} corrected</p>
-                  <p className="text-foreground/85">
-                    <span className="line-through text-muted-foreground">{c.previous}</span>{" "}
-                    → <span className="font-semibold tabular">{c.next}</span>
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">{relativeTime(c.at)}</p>
-                </div>
-              </div>
-            ))}
+                {showRationale ? "Show less" : "Show more"}
+                <ChevronDown className={cn("size-3.5 transition-transform", showRationale && "rotate-180")} />
+              </button>
+            )}
           </div>
         </>
       )}
+
+      {/* Timeline */}
+      <SectionLabel hint={`${events.length} event${events.length === 1 ? "" : "s"}`}>Timeline</SectionLabel>
+      <ol className="relative ml-3 space-y-4 border-l border-border pl-5">
+        {events.map((e, i) => {
+          const last = i === events.length - 1;
+          if (e.kind === "correction") {
+            return (
+              <li key={i} className="relative">
+                <span className="absolute -left-[27px] top-1.5 size-3 rounded-full bg-[var(--danger)] ring-2 ring-card" />
+                <div className="rounded-md border-l-[3px] border-l-[var(--danger)] bg-[var(--danger-soft)]/40 p-3 text-[12px]">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--danger)]">Correction</p>
+                  <p className="mt-0.5 font-semibold text-foreground">{e.label}</p>
+                  <p className="text-foreground/85">
+                    <span className="line-through text-muted-foreground tabular">{e.previous}</span>{" "}
+                    → <span className="font-semibold tabular">{e.next}</span>
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">{relativeTime(e.at)}</p>
+                </div>
+              </li>
+            );
+          }
+          return (
+            <li key={i} className="relative">
+              <span
+                className={cn(
+                  "absolute -left-[27px] top-1.5 rounded-full bg-[var(--smc-teal)] ring-2 ring-card",
+                  last ? "size-3" : "size-2.5",
+                )}
+              />
+              <p className="text-[13px] font-semibold text-foreground">{e.label}</p>
+              {e.detail && <p className="text-[12px] text-foreground/80">{e.detail}</p>}
+              <p className="text-[11px] text-muted-foreground">{relativeTime(e.at)}</p>
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* Engagement */}
+      <ReactionBar />
+
+      {/* Footer */}
+      <div className="mt-6 rounded-lg border border-border bg-card p-4 text-[12px] text-muted-foreground">
+        <p>
+          Published by <span className="font-semibold text-foreground">SMC Research Desk</span>
+        </p>
+        <p className="mt-1 tabular">
+          {product?.name ?? "—"} · {rec.conviction ?? "Standard"} conviction
+        </p>
+      </div>
     </PortalShell>
   );
+}
+
+function assetLabel(a: Recommendation["assetClass"]) {
+  switch (a) {
+    case "EQUITY":
+      return "Equity Cash";
+    case "INDEX_OPTION":
+      return "Index Option";
+    case "STOCK_OPTION":
+      return "Stock Option";
+    case "COMMODITY":
+      return "Commodity";
+  }
 }
 
 function Stat({ k, v, tone }: { k: string; v: string; tone?: "danger" | "success" }) {
