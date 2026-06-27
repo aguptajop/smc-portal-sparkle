@@ -6,6 +6,8 @@ const LABELS: Record<RecStatus, string> = {
   ACTIVE: "Active",
   PARTIAL: "Partial",
   CLOSED: "Closed",
+  CLOSED_WIN: "Closed",
+  CLOSED_LOSS: "Closed",
   CORRECTED: "Corrected",
 };
 
@@ -15,10 +17,24 @@ const STYLES: Record<RecStatus, string> = {
   ACTIVE: "bg-[var(--success-soft)] text-[var(--success)] ring-1 ring-inset ring-[var(--success)]/20",
   PARTIAL: "bg-[var(--info-soft)] text-[var(--smc-blue)] ring-1 ring-inset ring-[var(--smc-blue)]/15",
   CLOSED: "bg-secondary text-muted-foreground ring-1 ring-inset ring-border",
+  CLOSED_WIN: "bg-[var(--success-soft)] text-[var(--success)] ring-1 ring-inset ring-[var(--success)]/20",
+  CLOSED_LOSS: "bg-[var(--danger-soft)] text-[var(--danger)] ring-1 ring-inset ring-[var(--danger)]/20",
   CORRECTED: "bg-[var(--danger-soft)] text-[var(--danger)] ring-1 ring-inset ring-[var(--danger)]/20",
 };
 
-export function StatusChip({ status, className }: { status: RecStatus; className?: string }) {
+export function StatusChip({
+  status,
+  className,
+  pnlPct,
+}: {
+  status: RecStatus;
+  className?: string;
+  /** When present and status is closed-flavoured, shown after label, e.g. "Closed +2.8%" */
+  pnlPct?: number;
+}) {
+  const label = LABELS[status];
+  const showPnl =
+    typeof pnlPct === "number" && (status === "CLOSED_WIN" || status === "CLOSED_LOSS" || status === "CLOSED");
   return (
     <span
       className={cn(
@@ -30,7 +46,14 @@ export function StatusChip({ status, className }: { status: RecStatus; className
       {status === "ACTION_REQUIRED" && (
         <span className="size-1.5 rounded-full bg-current animate-pulse" />
       )}
-      {LABELS[status]}
+      {label}
+      {showPnl && (
+        <span className="tabular">
+          {" "}
+          {pnlPct! > 0 ? "+" : ""}
+          {pnlPct!.toFixed(1)}%
+        </span>
+      )}
     </span>
   );
 }
