@@ -5,31 +5,36 @@ import {
   Home,
   Activity,
   User,
+  LayoutGrid,
   ListChecks,
   PlusCircle,
   Eye,
   Bell,
   Search,
   Bookmark,
-  FileText,
-  TrendingUp,
   HelpCircle,
 } from "lucide-react";
 import { unreadNotifications } from "@/lib/pulse-data";
+import { actionRequiredCount } from "@/lib/mock-data";
+import { OfflineBanner } from "./offline-banner";
 
 interface NavItem {
   to: string;
   label: string;
   icon: typeof Home;
+  /** Optional indicator dot (action required, etc.) */
+  dot?: boolean;
 }
 
-const CLIENT_NAV: NavItem[] = [
-  { to: "/client", label: "Home", icon: Home },
-  { to: "/client/activity", label: "Activity", icon: Activity },
-  { to: "/client/reports", label: "Reports", icon: FileText },
-  { to: "/client/ipo", label: "IPO/OFS", icon: TrendingUp },
-  { to: "/client/profile", label: "Profile", icon: User },
-];
+function clientNav(): NavItem[] {
+  const ar = actionRequiredCount();
+  return [
+    { to: "/client", label: "Home", icon: Home, dot: ar > 0 },
+    { to: "/client/activity", label: "Activity", icon: Activity },
+    { to: "/client/products", label: "Products", icon: LayoutGrid },
+    { to: "/client/profile", label: "Profile", icon: User },
+  ];
+}
 
 const ANALYST_NAV: NavItem[] = [
   { to: "/analyst", label: "Queue", icon: ListChecks },
@@ -41,18 +46,25 @@ export function PortalShell({
   portal,
   children,
   title,
+  headerSlot,
+  subBar,
 }: {
   portal: "client" | "analyst";
   title?: string;
+  /** Renders next to the logo (e.g. Product Switcher on Home) */
+  headerSlot?: ReactNode;
+  /** Sticky secondary bar below header (e.g. desktop product pill bar) */
+  subBar?: ReactNode;
   children: ReactNode;
 }) {
-  const nav = portal === "client" ? CLIENT_NAV : ANALYST_NAV;
+  const nav = portal === "client" ? clientNav() : ANALYST_NAV;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const unread = portal === "client" ? unreadNotifications() : 0;
 
   return (
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
       <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur supports-[backdrop-filter]:bg-card/75">
+        <OfflineBanner />
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-3 px-4">
           <Link to="/" className="flex items-center gap-2">
             <div className="grid size-7 place-items-center rounded-md bg-[var(--smc-blue)] text-white font-bold text-[11px]">
@@ -65,7 +77,8 @@ export function PortalShell({
               </span>
             </div>
           </Link>
-          {title && (
+          {headerSlot && <div className="ml-2 min-w-0">{headerSlot}</div>}
+          {!headerSlot && title && (
             <div className="ml-2 truncate text-sm font-semibold text-foreground">{title}</div>
           )}
           <nav className="ml-auto hidden items-center gap-1 lg:flex">
@@ -76,7 +89,7 @@ export function PortalShell({
                   key={n.to}
                   to={n.to}
                   className={cn(
-                    "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors",
+                    "relative flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors",
                     active
                       ? "bg-accent text-accent-foreground"
                       : "text-muted-foreground hover:bg-secondary hover:text-foreground",
@@ -84,6 +97,9 @@ export function PortalShell({
                 >
                   <n.icon className="size-4" />
                   {n.label}
+                  {n.dot && (
+                    <span className="size-1.5 rounded-full bg-[var(--warning)]" aria-label="needs attention" />
+                  )}
                 </Link>
               );
             })}
@@ -136,14 +152,14 @@ export function PortalShell({
               <Link
                 to="/client/search"
                 aria-label="Search"
-                className="grid size-9 place-items-center rounded-md text-muted-foreground hover:bg-secondary"
+                className="grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-secondary"
               >
                 <Search className="size-[18px]" />
               </Link>
               <Link
                 to="/client/notifications"
                 aria-label="Notifications"
-                className="relative grid size-9 place-items-center rounded-md text-muted-foreground hover:bg-secondary"
+                className="relative grid size-11 place-items-center rounded-md text-muted-foreground hover:bg-secondary"
               >
                 <Bell className="size-[18px]" />
                 {unread > 0 && (
@@ -155,6 +171,11 @@ export function PortalShell({
             </div>
           )}
         </div>
+        {subBar && (
+          <div className="border-t border-border bg-card/70">
+            <div className="mx-auto max-w-5xl px-4 py-2">{subBar}</div>
+          </div>
+        )}
       </header>
 
       <main className="mx-auto w-full max-w-5xl px-4 py-5 sm:py-7">{children}</main>
@@ -171,12 +192,15 @@ export function PortalShell({
                 key={n.to}
                 to={n.to}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium",
-                  active ? "text-[var(--smc-blue)]" : "text-muted-foreground",
+                  "relative flex min-h-[56px] flex-col items-center justify-center gap-1 py-2 text-[11px] font-medium",
+                  active ? "text-[var(--smc-blue)] font-bold" : "text-muted-foreground",
                 )}
               >
                 <n.icon className={cn("size-5", active && "text-[var(--smc-teal)]")} />
                 {n.label}
+                {n.dot && (
+                  <span className="absolute right-[28%] top-[10px] size-2 rounded-full bg-[var(--warning)]" aria-hidden />
+                )}
               </Link>
             );
           })}
