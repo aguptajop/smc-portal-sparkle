@@ -1,102 +1,127 @@
+# SMC Pulse Client — Implementation Plan (v2)
 
-# SMC Pulse MVP — Build Plan
+Authority: `CLIENT-EXPERIENCE-MASTER-SPEC.md` v1.1 governs every decision. Where this plan and the spec disagree, the spec wins. Analyst portal is OUT of scope for this revision.
 
-## Primary Goal (Master Instruction Layer)
-Clients must instantly understand:
-1. What changed?
-2. What is active?
-3. What action is required?
+## Product Laws (Absolute)
+Research IS the product. UI serves research. Three questions, every screen:
+1. What is new?
+2. What needs action?
+3. What is the current state of my positions?
 
-Research content IS the product. Design for clarity, trust, transparency and actionability.
+Anti-patterns (do not implement): dashboard widgets, greeting banners on Home, marketing copy, CRM layouts, social/gamification, decorative gradients, excessive motion.
 
-Avoid: dashboard-heavy UI, CRM layouts, analytics-first layouts, crypto-style aesthetics, excessive animations.
-
-Styled as a natural extension of the SMC subscription portal (deep SMC Blue `#003A70`, teal accent `#0097A7`, white cards on `#F8FAFC`, Inter typography, restrained institutional feel).
-
-## Design System (src/styles.css)
-- Brand tokens: `--smc-blue #003A70`, `--smc-teal #0097A7`, success/warning/error/neutrals per spec
-- Typography: Inter, sizes per spec (32/24/18/14-16/12)
-- Spacing: 8px base grid
-- Card treatment: white surface, subtle border `#E5E7EB`, soft shadow, 8–12px radius — matching the calm SMC portal feel (no gradients, no glass)
-- Status chip system used consistently across both portals: DRAFT / PUBLISHED / UPDATED / ACTION REQUIRED / ACTIVE / PARTIAL BOOKING / TARGET ACHIEVED / SL HIT / EXPIRED / CLOSED / CORRECTED
-- Relative-time helper
-
-## Products (canonical)
-Each product carries a Research Summary, Risk Profile, Holding Horizon, and Call ID prefix:
-- **Techno Funda** — Risk: Moderate · Holding: 1–5 Trading Days · Prefix: `TF-YYYY-####`
-- **Nifty50** — Risk: High · Holding: Intraday to 5 Trading Days · Prefix: `NF-YYYY-####`
-- **Commodity Mantra** — Risk: High · Holding: Intraday to 10 Trading Days · Prefix: `CM-YYYY-####`
-
-Call IDs (e.g. `TF-2026-0001`) are visible **only in the Analyst Portal**.
+## Bottom Nav — exactly 4
+`Home` · `Activity` · `Products` · `Profile`. IPO/OFS/Reports are content TYPES, accessible via Activity (filters), Search and deep links — NOT tabs.
 
 ## Routes (TanStack Start)
 ```
-/              Landing (portal switcher — Client / Analyst)
-/client                       Client Home (Research Continuity, Need Attention, Subscribed Products)
-/client/activity              Activity Center (grouped by product, hierarchy below)
-/client/product/$id           Product Detail (strict 8-section ordering, below)
-/client/recommendation/$id    Recommendation Detail (Summary/Status/Timeline/Updates/Corrections)
-/client/profile               Profile + Support + Logout
+/                              Landing → /auth or /client
+/auth                          Phone + OTP login
+/onboarding/kyc                KYC contextual gate (5 steps)
+/onboarding/subscribe          Plan selection + checkout simulation
 
-/analyst                      Analyst Home (Attention Queue + Drafts + Product Activity Summary)
-/analyst/create               Create Recommendation (Equity / Index Option / Stock Option / Commodity forms)
-/analyst/recommendation/$id   Update Recommendation (Book %, Trail SL, Exit, Correct)
-/analyst/commentary           Publish Commentary (Morning Note / Market Outlook / Critical Update)
-/analyst/preview              Preview Client Experience (renders client view in a framed mock)
+/client                        Home (Research Workspace, per Product Switcher)
+/client/activity               Activity Center (cross-product, filter chips)
+/client/products               Products: Subscribed → Available → Tools
+/client/profile                Account + Subscriptions + Settings + Sign Out
+
+/client/notifications          Notification Center (Today / Yesterday / This Week / Earlier)
+/client/search                 Global search overlay
+/client/bookmarks              Saved items
+/client/settings               Notification prefs + Devices
+/client/subscription           Billing & invoices
+/client/help                   Support
+
+/client/product/$id            Product Detail (3-col desktop, 8-section mobile)
+/client/recommendation/$id     Recommendation Detail + Timeline + Corrections
+/client/commentary/$id         Commentary Detail
+/client/poll/$id               Poll Detail
+/client/report/$id             Report Detail
+/client/ipo/$id                IPO Review Detail
+/client/ofs/$id                OFS Review Detail
 ```
 
-## Shared Components
-- `StatusChip`, `RelativeTime`, `RecommendationCard` (Equity / Option / Commodity variants), `ProductCard`, `CommentaryCard`, `ActionRequiredBanner`, `ResearchContinuityBanner`, `EmptyState`, `PortalShell` (bottom nav on mobile, side nav on desktop)
+## Information Hierarchy by screen
 
-## Client Portal — content per spec
-- **Home**: Research Continuity Banner (Last Call / Last Commentary / Research Status); Need Attention widget ("2 Recommendations Require Action · 3 Updates Since Last Visit · 1 New Commentary"); Subscribed Product cards (Techno Funda, Index Trading, Commodity Mantra, etc.) ordered: Action Required → Active → No-update → Subscription required
-- **Activity Center**: feed grouped by product, newest first, with visual emphasis on Action Required items. Within each product group, hierarchy is:
-  1. Action Required
-  2. Recommendation Updates
-  3. New Recommendations
-  4. Commentary
-- **Product Detail (strict ordering)**:
-  1. Product Overview (name, Research Summary, Risk Profile, Holding Horizon)
-  2. Action Required
-  3. Changes Since Last Visit
-  4. Active Recommendations
-  5. Pinned Commentary
-  6. Commentary
-  7. Closed Calls (last 90 days)
-  8. Historical Archive (read-only, older than 90 days)
-- **Recommendation Detail**: full timeline, corrections shown transparently (previous → new value + timestamp)
+### Home (per Product Switcher; "All Products" allowed)
+1. Action Required (amber left border; impossible to scroll past)
+2. New Since Last Visit (capped 24h–7d window)
+3. Active Positions (ACTIVE + PARTIAL — excluding any in Action Required)
+4. Pinned Commentary (max 1, two-line preview)
+5. Recently Closed (max 3, last 7 days)
 
-### Archive Governance
-- Closed calls visible inline for 90 days.
-- Older closed calls move to the Historical Archive section (read-only).
+No greeting. No banners. No metrics widgets.
 
-## Analyst Portal — content per spec
-- **Home**: Research Attention Queue (recs needing analyst action), Drafts, Recently Published, and **Product Activity Summary** table with columns: Product Name · Active Calls · Updated Today · Commentary Published Today · Last Activity
-- **Create Recommendation**: Product selector → form variant per asset class (Equity/Index Option/Stock Option/Commodity) with mandatory fields, conviction, rationale, draft autosave indicator, "Visible To" + "Visible On" summary
-- **Update Recommendation**: Book 50%, Trail SL, Exit Position, Correct Field (with transparency note)
-- **Commentary Composer**: type selector, pinned toggle (max 1 active pinned/product), preview
-- **Preview Client Experience**: live rendering of the recommendation/commentary as the client will see it, inside a phone frame
+### Activity Center
+- Filter chip bar: Product · Type (All/Calls/Commentary/Reports/Polls) · Status · Time (More ▾ sheet on mobile)
+- Cross-product chronological stream with Product Badge on every card
+- 20 initial, infinite scroll
+- Empty filtered state with "Clear filters" CTA
 
-### Publish Impact Preview (Create / Update / Commentary)
-Before any Publish action, show:
-- **Visible To:** [Subscribers of <Product>]
-- **Visible On:** Activity Center · Product Detail · Recommendation Detail
+### Products
+- Subscribed (with active/action counts + validity)
+- Available (locked overlay)
+- Tools (Autotrender, external launch)
 
-## Mobile-First
-- Bottom nav (3 items max per spec: Home / Activity / Profile for client; Queue / Create / Profile for analyst)
-- Sticky action bar on detail pages
+### Recommendation Detail
+Direction + Instrument + Status header → Key Values grid (Entry / SL / Targets) → Action Required banner (if applicable) → Rationale (collapsed) → Timeline (chronological, append-only) → Corrections (strike-through previous → new) → 5-emoji Engagement bar + Bookmark → Published-by footer.
 
-## Desktop Product Detail Layout (frozen)
-Three-column reflow:
-- **20%** — Sticky Product Navigation (jump to the 8 sections above)
-- **55%** — Main Research Content
-- **25%** — Sticky Commentary + Activity Panel
+### Notifications
+Grouped by Today / Yesterday / This Week / Earlier. Unread = 8px blue dot. "Mark all read" in header. 90-day retention.
 
-## Technical
-- Pure frontend with realistic mock data in `src/lib/mock-data.ts` (real instruments: RELIANCE, HDFCBANK, NIFTY 25500 CE, CRUDEOIL — never "Stock XYZ")
-- All shadcn components themed via tokens; no hardcoded colors in JSX
-- No Lovable Cloud needed for MVP visual build
-- SEO: per-route titles and descriptions; sitemap.xml + robots.txt
+### Search
+Full-screen overlay (mobile), inline input (desktop). 300ms debounce, min 2 chars. Results grouped by type. Recent searches before typing. "No results for X" guidance.
 
-## Out of Scope (MVP visual prototype)
-- Real auth, real publishing pipeline, charts/widgets, portfolio tracking
+### Profile
+Account card (name/phone/email; edit sheet) → Subscriptions list → Quick access tiles → Settings (Notification Prefs, Devices, Help, Legal) → Sign out.
+
+## Design System
+- Brand: SMC Blue `#003A70`, Teal `#0097A7`, Teal-soft `#E0F7FA`
+- Status: ACTIVE = teal-soft / teal text; ACTION_REQUIRED = amber-soft / amber; PARTIAL = purple-soft / purple; CLOSED_WIN = green-soft / green; CLOSED_LOSS = red-soft / red
+- Direction: BUY green / SELL red (with soft background)
+- Product badge accents: Techno Funda = teal, Index Trading = blue, Commodity Mantra = amber, Bullion = gold, Equity = green
+- Tabular numerals on every financial value (`.tabular`)
+- Card: 1px border, 8px radius, no shadow at rest, soft shadow on hover, 16px padding; Action-Required cards = 3px amber left border
+- Spacing scale: 4/8/12/16/20/24/32
+- Motion respects `prefers-reduced-motion`
+
+## Reusable Components (target catalogue)
+`StatusChip`, `DirectionTag`, `ProductBadge`, `ProductSwitcher`, `RecommendationCard` (with `showProductBadge`, `compact`), `CommentaryCard`, `PollCard`, `ReportCard`, `IPOCard`, `OFSCard`, `ProductCard`, `ReactionBar` (5 fixed emojis), `BookmarkToggle`, `FilterChipBar`, `EmptyView`, `ErrorView`, `OfflineBanner`, `Skeleton` + `CardSkeleton`, `TimelineEvent`, `CorrectionEvent`, `KeyValueGrid`, `RelativeTime`, `PortalShell`, `PageHeader`, `SectionLabel`.
+
+## Data
+Mock data lives in `src/lib/mock-data.ts` + `src/lib/pulse-data.ts`. Real instruments (RELIANCE, HDFCBANK, NIFTY 25500 CE, BANKNIFTY 56000 PE, CRUDEOIL, INFY, TATAMOTORS), realistic price levels, all status states, ≥1 correction, ≥1 multi-target, ≥1 option, ≥1 commodity, polls added.
+
+## Mandatory state coverage per screen
+Loading skeleton matching content shape · Empty (with guidance) · Error (with retry) · Offline (cached + banner) · Permission/Locked (renewal CTA). Never blank. Never spinner-only.
+
+## Desktop Adaptation (≥1024px)
+- Bottom nav hidden; header nav links visible (Home/Activity/Products/Profile)
+- Content max-width 960px centered
+- Activity filters become left sidebar
+- Product Detail uses 3-col: 20% sticky nav · 55% content · 25% sticky commentary/activity
+- Hover states on cards; focus rings; keyboard nav (`/` focuses search, `Esc` closes overlays)
+
+## Backlog (this revision implements all)
+
+| # | Area | Action |
+|---|------|--------|
+| 1 | Nav | Collapse 5-tab nav to 4 (remove Reports/IPO tabs) |
+| 2 | Home | Remove greeting + ResearchContinuity + NeedAttention; rebuild per spec hierarchy |
+| 3 | Home | Add Product Switcher (header dropdown on mobile, sticky pill bar on desktop) |
+| 4 | Activity | Filter chip bar + cross-product feed with ProductBadge |
+| 5 | Products | New `/client/products` route per spec |
+| 6 | Notifications | Regroup by Today/Yesterday/This Week/Earlier |
+| 7 | Recommendation Detail | Engagement bar with 5 fixed emojis; published-by footer; key values prominent |
+| 8 | New routes | commentary/$id, poll/$id, report/$id, ipo/$id, ofs/$id |
+| 9 | Data | Add polls; expand recommendations across more products |
+| 10 | Profile | Trim per spec; remove duplicate "Quick access" tiles inconsistent with spec |
+| 11 | States | OfflineBanner global; ErrorView retry CTAs; skeleton variants per screen |
+| 12 | Product Detail | 3-col desktop layout; mobile remains 8-section ordering |
+| 13 | Cards | Recommendation card: latest action prominent; compact variant + showProductBadge |
+| 14 | A11y | 44px tap targets, focus rings, aria-labels on icon buttons |
+
+## Out of Scope (this revision)
+- Real auth/Firestore/push pipelines (mock only)
+- Analytics emitters (spec lists events; we stub at boundaries only)
+- Watermark overlay
+- Analyst portal changes
