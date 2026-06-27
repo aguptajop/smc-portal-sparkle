@@ -1,4 +1,11 @@
-export type RecStatus = "ACTION_REQUIRED" | "ACTIVE" | "PARTIAL" | "CLOSED" | "CORRECTED";
+export type RecStatus =
+  | "ACTION_REQUIRED"
+  | "ACTIVE"
+  | "PARTIAL"
+  | "CLOSED"
+  | "CLOSED_WIN"
+  | "CLOSED_LOSS"
+  | "CORRECTED";
 export type AssetClass = "EQUITY" | "INDEX_OPTION" | "STOCK_OPTION" | "COMMODITY";
 export type Direction = "BUY" | "SELL";
 
@@ -53,8 +60,21 @@ export interface Product {
   holdingHorizon: string;
   researchStatus: "Active Today" | "No New Updates" | "Market Closed";
   subscribed: boolean;
+  /** Accent token for ProductBadge */
+  accent: "teal" | "blue" | "amber" | "gold" | "green";
+  validUntil?: string;
   lastCallAt?: string;
   lastCommentaryAt?: string;
+}
+
+export interface Poll {
+  id: string;
+  productId: string;
+  question: string;
+  options: { id: string; label: string; votes: number }[];
+  closesAt: string;
+  totalVotes: number;
+  userVote?: string;
 }
 
 const now = Date.now();
@@ -73,6 +93,8 @@ export const products: Product[] = [
     holdingHorizon: "1–5 Trading Days",
     researchStatus: "Active Today",
     subscribed: true,
+    accent: "teal",
+    validUntil: "15 Mar 2026",
     lastCallAt: minsAgo(15),
     lastCommentaryAt: hrsAgo(3),
   },
@@ -86,6 +108,8 @@ export const products: Product[] = [
     holdingHorizon: "Intraday to 5 Trading Days",
     researchStatus: "Active Today",
     subscribed: true,
+    accent: "blue",
+    validUntil: "15 Mar 2026",
     lastCallAt: minsAgo(42),
     lastCommentaryAt: hrsAgo(5),
   },
@@ -99,6 +123,8 @@ export const products: Product[] = [
     holdingHorizon: "Intraday to 3 Trading Days",
     researchStatus: "No New Updates",
     subscribed: true,
+    accent: "amber",
+    validUntil: "12 Aug 2026",
     lastCallAt: hrsAgo(20),
     lastCommentaryAt: hrsAgo(8),
   },
@@ -112,6 +138,7 @@ export const products: Product[] = [
     holdingHorizon: "2–8 Weeks",
     researchStatus: "No New Updates",
     subscribed: false,
+    accent: "green",
     lastCallAt: daysAgo(2),
     lastCommentaryAt: daysAgo(1),
   },
@@ -227,7 +254,7 @@ export const recommendations: Recommendation[] = [
     assetClass: "EQUITY",
     instrument: "INFY",
     direction: "BUY",
-    status: "CLOSED",
+    status: "CLOSED_WIN",
     entry: "1,520",
     sl: "1,492",
     targets: ["1,560", "1,585"],
@@ -245,7 +272,7 @@ export const recommendations: Recommendation[] = [
     assetClass: "EQUITY",
     instrument: "TATAMOTORS",
     direction: "BUY",
-    status: "CLOSED",
+    status: "CLOSED_LOSS",
     entry: "985",
     sl: "962",
     targets: ["1,015", "1,040"],
@@ -256,6 +283,21 @@ export const recommendations: Recommendation[] = [
       { at: daysAgo(8), label: "Entry initiated", type: "ENTRY" },
       { at: daysAgo(5), label: "SL hit — exit 962", type: "SL_HIT" },
     ],
+  },
+];
+
+export const polls: Poll[] = [
+  {
+    id: "poll-001",
+    productId: "index-trading",
+    question: "What's your Nifty view for this week?",
+    options: [
+      { id: "bull", label: "Bullish above 25,500", votes: 142 },
+      { id: "side", label: "Sideways 25,300 – 25,500", votes: 78 },
+      { id: "bear", label: "Bearish below 25,300", votes: 25 },
+    ],
+    closesAt: hrsAgo(-18),
+    totalVotes: 245,
   },
 ];
 
@@ -316,6 +358,18 @@ export function recsByProduct(id: string) {
   return recommendations.filter((r) => r.productId === id);
 }
 
+export function pollsByProduct(id: string) {
+  return polls.filter((p) => p.productId === id);
+}
+
+export function getPoll(id: string) {
+  return polls.find((p) => p.id === id);
+}
+
+export function getCommentary(id: string) {
+  return commentaries.find((c) => c.id === id);
+}
+
 export function commentariesByProduct(id: string) {
   return commentaries.filter((c) => c.productId === id);
 }
@@ -347,6 +401,27 @@ export function activityFeed() {
     }
   }
   return items.sort((a, b) => +new Date(b.at) - +new Date(a.at));
+}
+
+/** New recommendations since N hours ago. */
+export function newSince(hours: number, productId?: string) {
+  const cutoff = Date.now() - hours * 3600_000;
+  return recommendations.filter(
+    (r) =>
+      (!productId || r.productId === productId) &&
+      +new Date(r.updates[0]?.at ?? r.updatedAt) > cutoff,
+  );
+}
+
+export function recentlyClosed(productId?: string, max = 3) {
+  return recommendations
+    .filter(
+      (r) =>
+        (r.status === "CLOSED" || r.status === "CLOSED_WIN" || r.status === "CLOSED_LOSS") &&
+        (!productId || r.productId === productId),
+    )
+    .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
+    .slice(0, max);
 }
 
 export function relativeTime(iso: string) {
