@@ -30,8 +30,13 @@ import { Route as ClientActivityRouteImport } from './routes/client.activity'
 import { Route as AnalystPreviewRouteImport } from './routes/analyst.preview'
 import { Route as AnalystCreateRouteImport } from './routes/analyst.create'
 import { Route as AnalystCommentaryRouteImport } from './routes/analyst.commentary'
+import { Route as ClientReportIdRouteImport } from './routes/client.report.$id'
 import { Route as ClientRecommendationIdRouteImport } from './routes/client.recommendation.$id'
 import { Route as ClientProductIdRouteImport } from './routes/client.product.$id'
+import { Route as ClientPollIdRouteImport } from './routes/client.poll.$id'
+import { Route as ClientOfsIdRouteImport } from './routes/client.ofs.$id'
+import { Route as ClientIpoIdRouteImport } from './routes/client.ipo.$id'
+import { Route as ClientCommentaryIdRouteImport } from './routes/client.commentary.$id'
 import { Route as AnalystRecommendationIdRouteImport } from './routes/analyst.recommendation.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -139,6 +144,11 @@ const AnalystCommentaryRoute = AnalystCommentaryRouteImport.update({
   path: '/analyst/commentary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientReportIdRoute = ClientReportIdRouteImport.update({
+  id: '/client/report/$id',
+  path: '/client/report/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientRecommendationIdRoute = ClientRecommendationIdRouteImport.update({
   id: '/client/recommendation/$id',
   path: '/client/recommendation/$id',
@@ -147,6 +157,26 @@ const ClientRecommendationIdRoute = ClientRecommendationIdRouteImport.update({
 const ClientProductIdRoute = ClientProductIdRouteImport.update({
   id: '/client/product/$id',
   path: '/client/product/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientPollIdRoute = ClientPollIdRouteImport.update({
+  id: '/client/poll/$id',
+  path: '/client/poll/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientOfsIdRoute = ClientOfsIdRouteImport.update({
+  id: '/client/ofs/$id',
+  path: '/client/ofs/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientIpoIdRoute = ClientIpoIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ClientIpoRoute,
+} as any)
+const ClientCommentaryIdRoute = ClientCommentaryIdRouteImport.update({
+  id: '/client/commentary/$id',
+  path: '/client/commentary/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalystRecommendationIdRoute = AnalystRecommendationIdRouteImport.update({
@@ -165,7 +195,7 @@ export interface FileRoutesByFullPath {
   '/client/activity': typeof ClientActivityRoute
   '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/help': typeof ClientHelpRoute
-  '/client/ipo': typeof ClientIpoRoute
+  '/client/ipo': typeof ClientIpoRouteWithChildren
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/products': typeof ClientProductsRoute
   '/client/profile': typeof ClientProfileRoute
@@ -178,8 +208,13 @@ export interface FileRoutesByFullPath {
   '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
+  '/client/commentary/$id': typeof ClientCommentaryIdRoute
+  '/client/ipo/$id': typeof ClientIpoIdRoute
+  '/client/ofs/$id': typeof ClientOfsIdRoute
+  '/client/poll/$id': typeof ClientPollIdRoute
   '/client/product/$id': typeof ClientProductIdRoute
   '/client/recommendation/$id': typeof ClientRecommendationIdRoute
+  '/client/report/$id': typeof ClientReportIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -191,7 +226,7 @@ export interface FileRoutesByTo {
   '/client/activity': typeof ClientActivityRoute
   '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/help': typeof ClientHelpRoute
-  '/client/ipo': typeof ClientIpoRoute
+  '/client/ipo': typeof ClientIpoRouteWithChildren
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/products': typeof ClientProductsRoute
   '/client/profile': typeof ClientProfileRoute
@@ -204,8 +239,13 @@ export interface FileRoutesByTo {
   '/analyst': typeof AnalystIndexRoute
   '/client': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
+  '/client/commentary/$id': typeof ClientCommentaryIdRoute
+  '/client/ipo/$id': typeof ClientIpoIdRoute
+  '/client/ofs/$id': typeof ClientOfsIdRoute
+  '/client/poll/$id': typeof ClientPollIdRoute
   '/client/product/$id': typeof ClientProductIdRoute
   '/client/recommendation/$id': typeof ClientRecommendationIdRoute
+  '/client/report/$id': typeof ClientReportIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -218,7 +258,7 @@ export interface FileRoutesById {
   '/client/activity': typeof ClientActivityRoute
   '/client/bookmarks': typeof ClientBookmarksRoute
   '/client/help': typeof ClientHelpRoute
-  '/client/ipo': typeof ClientIpoRoute
+  '/client/ipo': typeof ClientIpoRouteWithChildren
   '/client/notifications': typeof ClientNotificationsRoute
   '/client/products': typeof ClientProductsRoute
   '/client/profile': typeof ClientProfileRoute
@@ -231,8 +271,13 @@ export interface FileRoutesById {
   '/analyst/': typeof AnalystIndexRoute
   '/client/': typeof ClientIndexRoute
   '/analyst/recommendation/$id': typeof AnalystRecommendationIdRoute
+  '/client/commentary/$id': typeof ClientCommentaryIdRoute
+  '/client/ipo/$id': typeof ClientIpoIdRoute
+  '/client/ofs/$id': typeof ClientOfsIdRoute
+  '/client/poll/$id': typeof ClientPollIdRoute
   '/client/product/$id': typeof ClientProductIdRoute
   '/client/recommendation/$id': typeof ClientRecommendationIdRoute
+  '/client/report/$id': typeof ClientReportIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -259,8 +304,13 @@ export interface FileRouteTypes {
     | '/analyst/'
     | '/client/'
     | '/analyst/recommendation/$id'
+    | '/client/commentary/$id'
+    | '/client/ipo/$id'
+    | '/client/ofs/$id'
+    | '/client/poll/$id'
     | '/client/product/$id'
     | '/client/recommendation/$id'
+    | '/client/report/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -285,8 +335,13 @@ export interface FileRouteTypes {
     | '/analyst'
     | '/client'
     | '/analyst/recommendation/$id'
+    | '/client/commentary/$id'
+    | '/client/ipo/$id'
+    | '/client/ofs/$id'
+    | '/client/poll/$id'
     | '/client/product/$id'
     | '/client/recommendation/$id'
+    | '/client/report/$id'
   id:
     | '__root__'
     | '/'
@@ -311,8 +366,13 @@ export interface FileRouteTypes {
     | '/analyst/'
     | '/client/'
     | '/analyst/recommendation/$id'
+    | '/client/commentary/$id'
+    | '/client/ipo/$id'
+    | '/client/ofs/$id'
+    | '/client/poll/$id'
     | '/client/product/$id'
     | '/client/recommendation/$id'
+    | '/client/report/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -325,7 +385,7 @@ export interface RootRouteChildren {
   ClientActivityRoute: typeof ClientActivityRoute
   ClientBookmarksRoute: typeof ClientBookmarksRoute
   ClientHelpRoute: typeof ClientHelpRoute
-  ClientIpoRoute: typeof ClientIpoRoute
+  ClientIpoRoute: typeof ClientIpoRouteWithChildren
   ClientNotificationsRoute: typeof ClientNotificationsRoute
   ClientProductsRoute: typeof ClientProductsRoute
   ClientProfileRoute: typeof ClientProfileRoute
@@ -338,8 +398,12 @@ export interface RootRouteChildren {
   AnalystIndexRoute: typeof AnalystIndexRoute
   ClientIndexRoute: typeof ClientIndexRoute
   AnalystRecommendationIdRoute: typeof AnalystRecommendationIdRoute
+  ClientCommentaryIdRoute: typeof ClientCommentaryIdRoute
+  ClientOfsIdRoute: typeof ClientOfsIdRoute
+  ClientPollIdRoute: typeof ClientPollIdRoute
   ClientProductIdRoute: typeof ClientProductIdRoute
   ClientRecommendationIdRoute: typeof ClientRecommendationIdRoute
+  ClientReportIdRoute: typeof ClientReportIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -491,6 +555,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalystCommentaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/report/$id': {
+      id: '/client/report/$id'
+      path: '/client/report/$id'
+      fullPath: '/client/report/$id'
+      preLoaderRoute: typeof ClientReportIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client/recommendation/$id': {
       id: '/client/recommendation/$id'
       path: '/client/recommendation/$id'
@@ -505,6 +576,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client/poll/$id': {
+      id: '/client/poll/$id'
+      path: '/client/poll/$id'
+      fullPath: '/client/poll/$id'
+      preLoaderRoute: typeof ClientPollIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/ofs/$id': {
+      id: '/client/ofs/$id'
+      path: '/client/ofs/$id'
+      fullPath: '/client/ofs/$id'
+      preLoaderRoute: typeof ClientOfsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client/ipo/$id': {
+      id: '/client/ipo/$id'
+      path: '/$id'
+      fullPath: '/client/ipo/$id'
+      preLoaderRoute: typeof ClientIpoIdRouteImport
+      parentRoute: typeof ClientIpoRoute
+    }
+    '/client/commentary/$id': {
+      id: '/client/commentary/$id'
+      path: '/client/commentary/$id'
+      fullPath: '/client/commentary/$id'
+      preLoaderRoute: typeof ClientCommentaryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/analyst/recommendation/$id': {
       id: '/analyst/recommendation/$id'
       path: '/analyst/recommendation/$id'
@@ -514,6 +613,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface ClientIpoRouteChildren {
+  ClientIpoIdRoute: typeof ClientIpoIdRoute
+}
+
+const ClientIpoRouteChildren: ClientIpoRouteChildren = {
+  ClientIpoIdRoute: ClientIpoIdRoute,
+}
+
+const ClientIpoRouteWithChildren = ClientIpoRoute._addFileChildren(
+  ClientIpoRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -525,7 +636,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientActivityRoute: ClientActivityRoute,
   ClientBookmarksRoute: ClientBookmarksRoute,
   ClientHelpRoute: ClientHelpRoute,
-  ClientIpoRoute: ClientIpoRoute,
+  ClientIpoRoute: ClientIpoRouteWithChildren,
   ClientNotificationsRoute: ClientNotificationsRoute,
   ClientProductsRoute: ClientProductsRoute,
   ClientProfileRoute: ClientProfileRoute,
@@ -538,8 +649,12 @@ const rootRouteChildren: RootRouteChildren = {
   AnalystIndexRoute: AnalystIndexRoute,
   ClientIndexRoute: ClientIndexRoute,
   AnalystRecommendationIdRoute: AnalystRecommendationIdRoute,
+  ClientCommentaryIdRoute: ClientCommentaryIdRoute,
+  ClientOfsIdRoute: ClientOfsIdRoute,
+  ClientPollIdRoute: ClientPollIdRoute,
   ClientProductIdRoute: ClientProductIdRoute,
   ClientRecommendationIdRoute: ClientRecommendationIdRoute,
+  ClientReportIdRoute: ClientReportIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
